@@ -2,5 +2,15 @@ print("================================")
 print("   GAMING PERFORMANCE ANALYZER")
 print("================================")
 
-print("Day 1 - Project Started")
-print("My goal is to become a Python and AI developer!")
+player_name = "Ram"
+game_name = "Free Fire"
+
+matches = 10
+kills = 85
+deaths = 40
+
+print("Player Name:", player_name)
+print("Game:", game_name)
+print("Matches:", matches)
+print("Kills:", kills)
+print("Deaths:", deaths)

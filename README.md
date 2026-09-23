@@ -15,3 +15,16 @@ Build a Gaming Performance Analyzer using:
 - NumPy
 - Matplotlib
 - Machine Learning
+
+## Day 2
+
+Today I learned about Python variables.
+
+I created variables to store:
+- Player name
+- Game name
+- Matches
+- Kills
+- Deaths
+- Wins
+- Losses
