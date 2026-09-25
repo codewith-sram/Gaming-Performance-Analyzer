@@ -64,3 +64,35 @@ Deaths: 40
 Wins: 6
 Losses: 4
 Headshots: 25
+
+## Day 4 - Gaming Performance Calculations
+
+Today I learned how to perform calculations in Python.
+
+### New features
+
+- K/D Ratio calculation
+- Win Rate calculation
+- Handling zero deaths
+- Rounding decimal values
+
+### Formulas
+
+K/D Ratio:
+
+Kills / Deaths
+
+Win Rate:
+
+(Wins / Matches) × 100
+
+### Example
+
+```text
+Kills: 85
+Deaths: 40
+K/D Ratio: 2.12
+
+Wins: 6
+Matches: 10
+Win Rate: 60.0%
