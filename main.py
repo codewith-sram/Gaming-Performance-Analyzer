@@ -23,6 +23,18 @@ else:
 # Calculate win rate
 win_rate = (wins / matches) * 100
 
+# Calculate performance rating
+if kd_ratio >= 2.5 and win_rate >= 70:
+    rating = "Excellent"
+elif kd_ratio >= 2.0 and win_rate >= 60:
+    rating = "Very Good"
+elif kd_ratio >= 1.5 and win_rate >= 50:
+    rating = "Good"
+elif kd_ratio >= 1.0:
+    rating = "Average"
+else:
+    rating = "Needs Improvement"
+
 # Display player information
 print("\n===== PLAYER INFORMATION =====")
 print("Player Name:", player_name)
@@ -37,9 +49,10 @@ print("Wins:", wins)
 print("Losses:", losses)
 print("Headshots:", headshots)
 
-# Display performance calculations
+# Display performance
 print("\n===== PERFORMANCE =====")
 print("K/D Ratio:", round(kd_ratio, 2))
 print("Win Rate:", round(win_rate, 2), "%")
+print("Performance Rating:", rating)
 
-print("\n===== DAY 4 COMPLETED =====")
+print("\n===== DAY 5 COMPLETED =====")

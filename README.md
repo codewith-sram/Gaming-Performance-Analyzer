@@ -96,3 +96,33 @@ K/D Ratio: 2.12
 Wins: 6
 Matches: 10
 Win Rate: 60.0%
+
+
+## Day 5 - Performance Rating
+
+Today I learned how to use:
+
+- `if`
+- `elif`
+- `else`
+- Comparison operators
+- `and`
+
+### New Feature
+
+The Gaming Performance Analyzer can now give the player a performance rating based on K/D ratio and win rate.
+
+### Performance Levels
+
+- Excellent
+- Very Good
+- Good
+- Average
+- Needs Improvement
+
+### Example
+
+```text
+K/D Ratio: 2.12
+Win Rate: 60.0%
+Performance Rating: Very Good
