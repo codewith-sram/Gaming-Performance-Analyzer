@@ -6,53 +6,37 @@ print("================================")
 player_name = input("Enter player name: ")
 game_name = input("Enter game name: ")
 
-# Gaming statistics
-matches = int(input("Enter total matches: "))
-kills = int(input("Enter total kills: "))
-deaths = int(input("Enter total deaths: "))
-wins = int(input("Enter total wins: "))
-losses = int(input("Enter total losses: "))
-headshots = int(input("Enter total headshots: "))
+# Number of matches
+total_matches = int(input("How many matches do you want to enter? "))
 
-# Calculate K/D ratio
-if deaths == 0:
-    kd_ratio = kills
-else:
-    kd_ratio = kills / deaths
+# Variables to store totals
+total_kills = 0
+total_deaths = 0
 
-# Calculate win rate
-win_rate = (wins / matches) * 100
+# Enter match information
+for match in range(1, total_matches + 1):
 
-# Calculate performance rating
-if kd_ratio >= 2.5 and win_rate >= 70:
-    rating = "Excellent"
-elif kd_ratio >= 2.0 and win_rate >= 60:
-    rating = "Very Good"
-elif kd_ratio >= 1.5 and win_rate >= 50:
-    rating = "Good"
-elif kd_ratio >= 1.0:
-    rating = "Average"
-else:
-    rating = "Needs Improvement"
+    print("\n===== MATCH", match, "=====")
 
-# Display player information
-print("\n===== PLAYER INFORMATION =====")
-print("Player Name:", player_name)
+    kills = int(input("Enter kills: "))
+    deaths = int(input("Enter deaths: "))
+
+    total_kills = total_kills + kills
+    total_deaths = total_deaths + deaths
+
+# Calculate average
+average_kills = total_kills / total_matches
+
+# Display result
+print("\n================================")
+print("       GAMING REPORT")
+print("================================")
+
+print("Player:", player_name)
 print("Game:", game_name)
+print("Total Matches:", total_matches)
+print("Total Kills:", total_kills)
+print("Total Deaths:", total_deaths)
+print("Average Kills:", round(average_kills, 2))
 
-# Display gaming statistics
-print("\n===== GAMING STATISTICS =====")
-print("Matches:", matches)
-print("Kills:", kills)
-print("Deaths:", deaths)
-print("Wins:", wins)
-print("Losses:", losses)
-print("Headshots:", headshots)
-
-# Display performance
-print("\n===== PERFORMANCE =====")
-print("K/D Ratio:", round(kd_ratio, 2))
-print("Win Rate:", round(win_rate, 2), "%")
-print("Performance Rating:", rating)
-
-print("\n===== DAY 5 COMPLETED =====")
+print("\n===== DAY 6 COMPLETED =====")

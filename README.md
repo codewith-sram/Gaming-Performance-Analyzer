@@ -126,3 +126,40 @@ The Gaming Performance Analyzer can now give the player a performance rating bas
 K/D Ratio: 2.12
 Win Rate: 60.0%
 Performance Rating: Very Good
+
+## Day 6 - Loops and Multiple Matches
+
+Today I learned about:
+
+- `for` loops
+- `range()`
+- Repeating code
+- Adding values using a loop
+- Calculating averages
+
+### New Feature
+
+The Gaming Performance Analyzer can now collect statistics from multiple matches.
+
+For each match, the user can enter:
+
+- Kills
+- Deaths
+
+The program calculates:
+
+- Total kills
+- Total deaths
+- Average kills
+
+### Example
+
+```text
+Match 1: 8 kills
+Match 2: 10 kills
+Match 3: 6 kills
+Match 4: 12 kills
+Match 5: 9 kills
+
+Total Kills: 45
+Average Kills: 9.0
