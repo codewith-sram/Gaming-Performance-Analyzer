@@ -53,5 +53,3 @@ print("Total Kills:", total_kills)
 print("Total Deaths:", total_deaths)
 print("Total Headshots:", total_headshots)
 print("Average Kills:", round(average_kills, 2))
-
-print("\n===== DAY 7 COMPLETED =====")

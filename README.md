@@ -195,4 +195,4 @@ Headshots: [3, 4, 2, 6, 3]
 Total Kills: 45
 Total Deaths: 21
 Total Headshots: 18
-Average Kills: 9.0
+Average Kills: 9
