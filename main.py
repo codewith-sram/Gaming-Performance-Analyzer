@@ -20,6 +20,7 @@ kills_list = []
 deaths_list = []
 headshots_list = []
 assists_list = []
+kd_list = []
 
 # -------------------------------
 # ENTER MATCH INFORMATION
@@ -40,6 +41,14 @@ for match in range(1, total_matches + 1):
     headshots_list.append(headshots)
     assists_list.append(assists)
 
+    # Calculate K/D for this match
+    if deaths == 0:
+        kd = kills
+    else:
+        kd = kills / deaths
+
+    kd_list.append(kd)
+
 # -------------------------------
 # TOTAL STATISTICS
 # -------------------------------
@@ -59,15 +68,21 @@ average_headshots = total_headshots / total_matches
 average_assists = total_assists / total_matches
 
 # -------------------------------
-# HIGHEST AND LOWEST KILLS
+# BEST AND WORST KILLS
 # -------------------------------
 
 highest_kills = max(kills_list)
 lowest_kills = min(kills_list)
 
-# Find the match numbers
-best_match = kills_list.index(highest_kills) + 1
-worst_match = kills_list.index(lowest_kills) + 1
+best_kill_match = kills_list.index(highest_kills) + 1
+worst_kill_match = kills_list.index(lowest_kills) + 1
+
+# -------------------------------
+# BEST K/D MATCH
+# -------------------------------
+
+highest_kd = max(kd_list)
+best_kd_match = kd_list.index(highest_kd) + 1
 
 # -------------------------------
 # DISPLAY MATCH DATA
@@ -81,6 +96,7 @@ print("Kills:", kills_list)
 print("Deaths:", deaths_list)
 print("Headshots:", headshots_list)
 print("Assists:", assists_list)
+print("K/D Ratio:", [round(kd, 2) for kd in kd_list])
 
 # -------------------------------
 # DISPLAY TOTALS
@@ -110,7 +126,7 @@ print("Average Headshots:", round(average_headshots, 2))
 print("Average Assists:", round(average_assists, 2))
 
 # -------------------------------
-# BEST AND WORST MATCH
+# MATCH PERFORMANCE
 # -------------------------------
 
 print("\n================================")
@@ -118,15 +134,18 @@ print("       MATCH PERFORMANCE")
 print("================================")
 
 print("Highest Kills:", highest_kills)
-print("Best Match: Match", best_match)
+print("Best Kill Match: Match", best_kill_match)
 
 print("Lowest Kills:", lowest_kills)
-print("Worst Match: Match", worst_match)
+print("Worst Kill Match: Match", worst_kill_match)
+
+print("Highest K/D:", round(highest_kd, 2))
+print("Best K/D Match: Match", best_kd_match)
 
 # -------------------------------
-# DAY 7 COMPLETE
+# DAY 8 COMPLETE
 # -------------------------------
 
 print("\n================================")
-print("       DAY 7 COMPLETED")
+print("       DAY 8 COMPLETED")
 print("================================")

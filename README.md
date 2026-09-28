@@ -204,3 +204,36 @@ The Gaming Performance Analyzer can now:
 - `for` loop
 
 Day 7 completed successfully!
+
+## Day 8 - Per-Match K/D Analysis
+
+Today I improved the Gaming Performance Analyzer by adding K/D ratio analysis for every match.
+
+### New Features
+
+The Gaming Performance Analyzer can now:
+
+- Calculate K/D ratio for each match
+- Store K/D ratios in a list
+- Find the highest K/D ratio
+- Find the match with the highest K/D ratio
+- Display K/D ratio for all matches
+
+### Python Concepts Learned
+
+- List indexing
+- `max()`
+- `index()`
+- `append()`
+- Creating and using multiple lists
+- Calculating values inside a `for` loop
+
+### Example
+
+```text
+Match 1 → K/D: 2.00
+Match 2 → K/D: 1.50
+Match 3 → K/D: 3.00
+
+Highest K/D: 3.00
+Best K/D Match: Match 3
