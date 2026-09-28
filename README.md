@@ -163,3 +163,36 @@ Match 5: 9 kills
 
 Total Kills: 45
 Average Kills: 9.0
+
+## Day 7 - Python Lists
+
+Today I learned about Python lists.
+
+### New concepts
+
+- Creating lists
+- Adding values using `append()`
+- Accessing list values
+- Using `sum()` with lists
+
+### New Features
+
+The Gaming Performance Analyzer can now store individual match statistics.
+
+It stores:
+
+- Kills
+- Deaths
+- Headshots
+
+### Example
+
+```text
+Kills: [8, 10, 6, 12, 9]
+Deaths: [4, 5, 3, 4, 5]
+Headshots: [3, 4, 2, 6, 3]
+
+Total Kills: 45
+Total Deaths: 21
+Total Headshots: 18
+Average Kills: 9.0
