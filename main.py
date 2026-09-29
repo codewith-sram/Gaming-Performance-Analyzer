@@ -2,6 +2,46 @@ print("================================")
 print("   GAMING PERFORMANCE ANALYZER")
 print("================================")
 
+
+# -------------------------------
+# FUNCTION: CALCULATE K/D
+# -------------------------------
+
+def calculate_kd(kills, deaths):
+
+    if deaths == 0:
+        return kills
+    else:
+        return kills / deaths
+
+
+# -------------------------------
+# FUNCTION: CALCULATE AVERAGE
+# -------------------------------
+
+def calculate_average(values):
+
+    return sum(values) / len(values)
+
+
+# -------------------------------
+# FUNCTION: FIND HIGHEST VALUE
+# -------------------------------
+
+def find_highest(values):
+
+    return max(values)
+
+
+# -------------------------------
+# FUNCTION: FIND LOWEST VALUE
+# -------------------------------
+
+def find_lowest(values):
+
+    return min(values)
+
+
 # -------------------------------
 # PLAYER INFORMATION
 # -------------------------------
@@ -9,11 +49,11 @@ print("================================")
 player_name = input("Enter player name: ")
 game_name = input("Enter game name: ")
 
-# Number of matches
 total_matches = int(input("How many matches do you want to enter? "))
 
+
 # -------------------------------
-# LISTS TO STORE MATCH DATA
+# LISTS
 # -------------------------------
 
 kills_list = []
@@ -22,8 +62,9 @@ headshots_list = []
 assists_list = []
 kd_list = []
 
+
 # -------------------------------
-# ENTER MATCH INFORMATION
+# ENTER MATCH DATA
 # -------------------------------
 
 for match in range(1, total_matches + 1):
@@ -35,19 +76,16 @@ for match in range(1, total_matches + 1):
     headshots = int(input("Enter headshots: "))
     assists = int(input("Enter assists: "))
 
-    # Store data in lists
     kills_list.append(kills)
     deaths_list.append(deaths)
     headshots_list.append(headshots)
     assists_list.append(assists)
 
-    # Calculate K/D for this match
-    if deaths == 0:
-        kd = kills
-    else:
-        kd = kills / deaths
+    # Use the K/D function
+    kd = calculate_kd(kills, deaths)
 
     kd_list.append(kd)
+
 
 # -------------------------------
 # TOTAL STATISTICS
@@ -58,31 +96,36 @@ total_deaths = sum(deaths_list)
 total_headshots = sum(headshots_list)
 total_assists = sum(assists_list)
 
+
 # -------------------------------
 # AVERAGE STATISTICS
 # -------------------------------
 
-average_kills = total_kills / total_matches
-average_deaths = total_deaths / total_matches
-average_headshots = total_headshots / total_matches
-average_assists = total_assists / total_matches
+average_kills = calculate_average(kills_list)
+average_deaths = calculate_average(deaths_list)
+average_headshots = calculate_average(headshots_list)
+average_assists = calculate_average(assists_list)
+
 
 # -------------------------------
-# BEST AND WORST KILLS
+# HIGHEST AND LOWEST KILLS
 # -------------------------------
 
-highest_kills = max(kills_list)
-lowest_kills = min(kills_list)
+highest_kills = find_highest(kills_list)
+lowest_kills = find_lowest(kills_list)
 
-best_kill_match = kills_list.index(highest_kills) + 1
-worst_kill_match = kills_list.index(lowest_kills) + 1
+best_match = kills_list.index(highest_kills) + 1
+worst_match = kills_list.index(lowest_kills) + 1
+
 
 # -------------------------------
-# BEST K/D MATCH
+# BEST K/D
 # -------------------------------
 
-highest_kd = max(kd_list)
+highest_kd = find_highest(kd_list)
+
 best_kd_match = kd_list.index(highest_kd) + 1
+
 
 # -------------------------------
 # DISPLAY MATCH DATA
@@ -96,7 +139,9 @@ print("Kills:", kills_list)
 print("Deaths:", deaths_list)
 print("Headshots:", headshots_list)
 print("Assists:", assists_list)
+
 print("K/D Ratio:", [round(kd, 2) for kd in kd_list])
+
 
 # -------------------------------
 # DISPLAY TOTALS
@@ -112,6 +157,7 @@ print("Total Deaths:", total_deaths)
 print("Total Headshots:", total_headshots)
 print("Total Assists:", total_assists)
 
+
 # -------------------------------
 # DISPLAY AVERAGES
 # -------------------------------
@@ -125,6 +171,7 @@ print("Average Deaths:", round(average_deaths, 2))
 print("Average Headshots:", round(average_headshots, 2))
 print("Average Assists:", round(average_assists, 2))
 
+
 # -------------------------------
 # MATCH PERFORMANCE
 # -------------------------------
@@ -134,18 +181,19 @@ print("       MATCH PERFORMANCE")
 print("================================")
 
 print("Highest Kills:", highest_kills)
-print("Best Kill Match: Match", best_kill_match)
+print("Best Match: Match", best_match)
 
 print("Lowest Kills:", lowest_kills)
-print("Worst Kill Match: Match", worst_kill_match)
+print("Worst Match: Match", worst_match)
 
 print("Highest K/D:", round(highest_kd, 2))
 print("Best K/D Match: Match", best_kd_match)
 
+
 # -------------------------------
-# DAY 8 COMPLETE
+# DAY 9 COMPLETE
 # -------------------------------
 
 print("\n================================")
-print("       DAY 8 COMPLETED")
+print("       DAY 9 COMPLETED")
 print("================================")

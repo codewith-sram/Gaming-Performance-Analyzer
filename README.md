@@ -237,3 +237,24 @@ Match 3 → K/D: 3.00
 
 Highest K/D: 3.00
 Best K/D Match: Match 3
+
+## Day 9 - Python Functions
+
+Today I learned how to use functions in Python.
+
+### Functions Added
+
+The Gaming Performance Analyzer now uses functions for:
+
+- Calculating K/D ratio
+- Calculating average statistics
+- Finding highest values
+- Finding lowest values
+
+### Functions Created
+
+```python
+calculate_kd()
+calculate_average()
+find_highest()
+find_lowest()
