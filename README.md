@@ -304,6 +304,30 @@ The program gives a rating based on overall K/D:
 
 ### Project Progress
 
-Days 1-10 completed successfully! ✅
+Days 1-10 completed successfully! 
 
 The project is now ready to move from Python basics toward data handling with NumPy and Pandas.
+
+## Day 11 - Introduction to NumPy
+
+Today I started learning NumPy for data analysis.
+
+### What I Learned
+
+- What NumPy is
+- How to install NumPy
+- NumPy arrays
+- Converting Python lists into NumPy arrays
+- Calculating totals using NumPy
+- Calculating averages using NumPy
+- Finding maximum values
+- Finding minimum values
+
+### NumPy Functions Used
+
+```python
+np.array()
+np.sum()
+np.mean()
+np.max()
+np.min()
