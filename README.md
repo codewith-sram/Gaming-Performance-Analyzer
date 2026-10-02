@@ -331,3 +331,26 @@ np.sum()
 np.mean()
 np.max()
 np.min()
+
+## Day 12 - NumPy Match Analysis
+
+Today I continued learning NumPy and used NumPy arrays for match-by-match gaming analysis.
+
+### New Features
+
+The Gaming Performance Analyzer can now:
+
+- Calculate K/D ratio using NumPy arrays
+- Calculate average K/D
+- Find highest K/D
+- Find lowest K/D
+- Find the best K/D match
+- Find the worst K/D match
+- Round K/D values using NumPy
+
+### New NumPy Functions
+
+```python
+np.argmax()
+np.argmin()
+np.round()
