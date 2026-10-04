@@ -354,3 +354,23 @@ The Gaming Performance Analyzer can now:
 np.argmax()
 np.argmin()
 np.round()
+
+## Day 13 - NumPy Statistical Analysis
+
+Today I learned more NumPy statistical functions and added statistical analysis to the Gaming Performance Analyzer.
+
+### New Features
+
+The analyzer can now:
+
+- Calculate median kills
+- Calculate median K/D
+- Calculate kill standard deviation
+- Analyze player consistency
+- Compare average and median performance
+
+### New NumPy Functions
+
+```python
+np.median()
+np.std()

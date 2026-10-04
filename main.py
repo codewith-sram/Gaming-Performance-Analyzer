@@ -36,28 +36,32 @@ assists_array = np.array(assists)
 kd_array = kills_array / deaths_array
 
 # ----------------------------------------
-# TOTAL STATISTICS
+# BASIC STATISTICS
 # ----------------------------------------
 
 total_kills = np.sum(kills_array)
-total_deaths = np.sum(deaths_array)
-total_headshots = np.sum(headshots_array)
-total_assists = np.sum(assists_array)
-
-# ----------------------------------------
-# AVERAGE STATISTICS
-# ----------------------------------------
-
 average_kills = np.mean(kills_array)
-average_deaths = np.mean(deaths_array)
-average_headshots = np.mean(headshots_array)
-average_assists = np.mean(assists_array)
+highest_kills = np.max(kills_array)
+lowest_kills = np.min(kills_array)
+
+# ----------------------------------------
+# MEDIAN
+# ----------------------------------------
+
+median_kills = np.median(kills_array)
+
+# ----------------------------------------
+# STANDARD DEVIATION
+# ----------------------------------------
+
+kill_consistency = np.std(kills_array)
 
 # ----------------------------------------
 # K/D STATISTICS
 # ----------------------------------------
 
 average_kd = np.mean(kd_array)
+median_kd = np.median(kd_array)
 highest_kd = np.max(kd_array)
 lowest_kd = np.min(kd_array)
 
@@ -80,33 +84,31 @@ print("Assists:", assists_array)
 print("K/D Ratio:", np.round(kd_array, 2))
 
 # ----------------------------------------
-# DISPLAY TOTALS
+# KILL STATISTICS
 # ----------------------------------------
 
 print("\n========================================")
-print("          TOTAL STATISTICS")
+print("          KILL STATISTICS")
 print("========================================")
 
 print("Total Kills:", total_kills)
-print("Total Deaths:", total_deaths)
-print("Total Headshots:", total_headshots)
-print("Total Assists:", total_assists)
+print("Average Kills:", round(average_kills, 2))
+print("Median Kills:", round(median_kills, 2))
+print("Highest Kills:", highest_kills)
+print("Lowest Kills:", lowest_kills)
 
 # ----------------------------------------
-# DISPLAY AVERAGES
+# CONSISTENCY
 # ----------------------------------------
 
 print("\n========================================")
-print("          AVERAGE STATISTICS")
+print("        PERFORMANCE CONSISTENCY")
 print("========================================")
 
-print("Average Kills:", round(average_kills, 2))
-print("Average Deaths:", round(average_deaths, 2))
-print("Average Headshots:", round(average_headshots, 2))
-print("Average Assists:", round(average_assists, 2))
+print("Kill Standard Deviation:", round(kill_consistency, 2))
 
 # ----------------------------------------
-# K/D ANALYSIS
+# K/D STATISTICS
 # ----------------------------------------
 
 print("\n========================================")
@@ -114,6 +116,7 @@ print("             K/D ANALYSIS")
 print("========================================")
 
 print("Average K/D:", round(average_kd, 2))
+print("Median K/D:", round(median_kd, 2))
 print("Highest K/D:", round(highest_kd, 2))
 print("Lowest K/D:", round(lowest_kd, 2))
 
@@ -121,9 +124,9 @@ print("Best K/D Match: Match", best_kd_match)
 print("Worst K/D Match: Match", worst_kd_match)
 
 # ----------------------------------------
-# DAY 12 COMPLETE
+# DAY 13 COMPLETE
 # ----------------------------------------
 
 print("\n========================================")
-print("          DAY 12 COMPLETED")
+print("          DAY 13 COMPLETED")
 print("========================================")
