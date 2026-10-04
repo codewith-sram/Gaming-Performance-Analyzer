@@ -39,31 +39,45 @@ kd_array = kills_array / deaths_array
 # BASIC STATISTICS
 # ----------------------------------------
 
-total_kills = np.sum(kills_array)
 average_kills = np.mean(kills_array)
+average_kd = np.mean(kd_array)
+
 highest_kills = np.max(kills_array)
 lowest_kills = np.min(kills_array)
 
-# ----------------------------------------
-# MEDIAN
-# ----------------------------------------
-
-median_kills = np.median(kills_array)
-
-# ----------------------------------------
-# STANDARD DEVIATION
-# ----------------------------------------
-
-kill_consistency = np.std(kills_array)
-
-# ----------------------------------------
-# K/D STATISTICS
-# ----------------------------------------
-
-average_kd = np.mean(kd_array)
-median_kd = np.median(kd_array)
 highest_kd = np.max(kd_array)
 lowest_kd = np.min(kd_array)
+
+# ----------------------------------------
+# MATCHES ABOVE AVERAGE KILLS
+# ----------------------------------------
+
+above_average = kills_array > average_kills
+
+above_average_count = np.sum(above_average)
+
+# ----------------------------------------
+# MATCHES BELOW AVERAGE KILLS
+# ----------------------------------------
+
+below_average = kills_array < average_kills
+
+below_average_count = np.sum(below_average)
+
+# ----------------------------------------
+# MATCHES ABOVE AVERAGE K/D
+# ----------------------------------------
+
+above_average_kd = kd_array > average_kd
+
+above_average_kd_count = np.sum(above_average_kd)
+
+# ----------------------------------------
+# BEST AND WORST MATCH
+# ----------------------------------------
+
+best_kills_match = np.argmax(kills_array) + 1
+worst_kills_match = np.argmin(kills_array) + 1
 
 best_kd_match = np.argmax(kd_array) + 1
 worst_kd_match = np.argmin(kd_array) + 1
@@ -84,49 +98,53 @@ print("Assists:", assists_array)
 print("K/D Ratio:", np.round(kd_array, 2))
 
 # ----------------------------------------
-# KILL STATISTICS
+# BASIC ANALYSIS
 # ----------------------------------------
 
 print("\n========================================")
-print("          KILL STATISTICS")
+print("          BASIC ANALYSIS")
 print("========================================")
 
-print("Total Kills:", total_kills)
 print("Average Kills:", round(average_kills, 2))
-print("Median Kills:", round(median_kills, 2))
+print("Average K/D:", round(average_kd, 2))
+
 print("Highest Kills:", highest_kills)
 print("Lowest Kills:", lowest_kills)
 
-# ----------------------------------------
-# CONSISTENCY
-# ----------------------------------------
-
-print("\n========================================")
-print("        PERFORMANCE CONSISTENCY")
-print("========================================")
-
-print("Kill Standard Deviation:", round(kill_consistency, 2))
-
-# ----------------------------------------
-# K/D STATISTICS
-# ----------------------------------------
-
-print("\n========================================")
-print("             K/D ANALYSIS")
-print("========================================")
-
-print("Average K/D:", round(average_kd, 2))
-print("Median K/D:", round(median_kd, 2))
 print("Highest K/D:", round(highest_kd, 2))
 print("Lowest K/D:", round(lowest_kd, 2))
+
+# ----------------------------------------
+# PERFORMANCE COMPARISON
+# ----------------------------------------
+
+print("\n========================================")
+print("       PERFORMANCE COMPARISON")
+print("========================================")
+
+print("Matches Above Average Kills:", above_average_count)
+print("Matches Below Average Kills:", below_average_count)
+
+print("Matches Above Average K/D:", above_average_kd_count)
+
+# ----------------------------------------
+# BEST AND WORST MATCHES
+# ----------------------------------------
+
+print("\n========================================")
+print("        BEST AND WORST MATCHES")
+print("========================================")
+
+print("Best Kill Match: Match", best_kills_match)
+print("Worst Kill Match: Match", worst_kills_match)
 
 print("Best K/D Match: Match", best_kd_match)
 print("Worst K/D Match: Match", worst_kd_match)
 
 # ----------------------------------------
-# DAY 13 COMPLETE
+# DAY 14 COMPLETE
 # ----------------------------------------
 
 print("\n========================================")
-print("          DAY 13 COMPLETED")
+print("          DAY 14 COMPLETED")
 print("========================================")

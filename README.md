@@ -374,3 +374,38 @@ The analyzer can now:
 ```python
 np.median()
 np.std()
+
+## Day 14 - NumPy Performance Comparison
+
+Today I learned how to compare NumPy arrays with values and analyze individual match performance.
+
+### New Features
+
+The Gaming Performance Analyzer can now:
+
+- Find matches above average kills
+- Find matches below average kills
+- Count matches above average kills
+- Count matches below average kills
+- Find matches above average K/D
+- Count matches above average K/D
+- Compare individual matches with overall performance
+
+### New Concepts
+
+- Boolean arrays
+- Array comparison
+- `True` and `False` values
+- Counting conditions using `np.sum()`
+
+### Example
+
+If the average kills are 13:
+
+```text
+Kills: [12, 15, 8, 20, 10]
+
+Above Average:
+[False, True, False, True, False]
+
+Matches Above Average: 2
