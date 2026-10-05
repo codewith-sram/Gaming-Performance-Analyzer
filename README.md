@@ -409,3 +409,23 @@ Above Average:
 [False, True, False, True, False]
 
 Matches Above Average: 2
+
+## Day 15 - Introduction to Pandas
+
+Today I started learning Pandas for data analysis.
+
+### What I Learned
+
+- What Pandas is
+- How to install Pandas
+- What a DataFrame is
+- How to create a DataFrame
+- How to add a new column
+- How to select a column
+- How to display gaming data as a table
+
+### Pandas Functions and Concepts
+
+```python
+pd.DataFrame()
+df["column"]
