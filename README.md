@@ -459,3 +459,28 @@ Today I learned how to analyze a Pandas DataFrame.
 The Gaming Performance Analyzer can now inspect the structure and statistics of the gaming dataset.
 
 Day 16 completed successfully! 
+
+## Day 17 - Pandas Filtering and Sorting
+
+Today I learned how to filter and sort gaming data using Pandas.
+
+### New Features
+
+The Gaming Performance Analyzer can now:
+
+- Find matches with 15 or more kills
+- Find matches with 5 or fewer deaths
+- Find matches with 2.5 or higher K/D
+- Sort matches by kills
+- Sort matches by K/D
+- Find the best K/D match
+
+### Pandas Concepts Learned
+
+```python
+df[df["Kills"] >= 15]
+df[df["Deaths"] <= 5]
+df[df["K/D"] >= 2.5]
+df.sort_values()
+df.loc[]
+df.idxmax()

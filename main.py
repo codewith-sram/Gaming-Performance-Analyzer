@@ -43,81 +43,91 @@ df = pd.DataFrame(data)
 df["K/D"] = df["Kills"] / df["Deaths"]
 
 # ----------------------------------------
-# PLAYER INFORMATION
+# DISPLAY COMPLETE DATA
 # ----------------------------------------
 
 print("\n========================================")
-print("          PLAYER INFORMATION")
+print("          COMPLETE MATCH DATA")
 print("========================================")
 
-print("Player Name:", player_name)
-print("Game:", game_name)
+print(df.round(2))
 
 # ----------------------------------------
-# COMPLETE DATA
+# FILTER: HIGH KILL MATCHES
 # ----------------------------------------
+
+high_kill_matches = df[df["Kills"] >= 15]
 
 print("\n========================================")
-print("          COMPLETE DATA")
+print("       MATCHES WITH 15+ KILLS")
 print("========================================")
 
-print(df)
+print(high_kill_matches.round(2))
 
 # ----------------------------------------
-# FIRST 5 ROWS
+# FILTER: LOW DEATH MATCHES
 # ----------------------------------------
+
+low_death_matches = df[df["Deaths"] <= 5]
 
 print("\n========================================")
-print("          FIRST 5 ROWS")
+print("       MATCHES WITH 5 OR LESS DEATHS")
 print("========================================")
 
-print(df.head())
+print(low_death_matches.round(2))
 
 # ----------------------------------------
-# LAST 5 ROWS
+# FILTER: HIGH K/D MATCHES
 # ----------------------------------------
+
+high_kd_matches = df[df["K/D"] >= 2.5]
 
 print("\n========================================")
-print("          LAST 5 ROWS")
+print("       MATCHES WITH 2.5+ K/D")
 print("========================================")
 
-print(df.tail())
+print(high_kd_matches.round(2))
 
 # ----------------------------------------
-# DATA INFORMATION
+# SORT BY KILLS
 # ----------------------------------------
+
+sorted_by_kills = df.sort_values(by="Kills", ascending=False)
 
 print("\n========================================")
-print("          DATA INFORMATION")
+print("       MATCHES SORTED BY KILLS")
 print("========================================")
 
-df.info()
+print(sorted_by_kills.round(2))
 
 # ----------------------------------------
-# STATISTICAL SUMMARY
+# SORT BY K/D
 # ----------------------------------------
+
+sorted_by_kd = df.sort_values(by="K/D", ascending=False)
 
 print("\n========================================")
-print("       STATISTICAL SUMMARY")
+print("       MATCHES SORTED BY K/D")
 print("========================================")
 
-print(df.describe())
+print(sorted_by_kd.round(2))
 
 # ----------------------------------------
-# DATASET SIZE
+# BEST MATCH
 # ----------------------------------------
+
+best_match = df.loc[df["K/D"].idxmax()]
 
 print("\n========================================")
-print("          DATASET SIZE")
+print("             BEST MATCH")
 print("========================================")
 
-print("Rows:", df.shape[0])
-print("Columns:", df.shape[1])
+print(best_match.round(2))
 
 # ----------------------------------------
-# DAY 16 COMPLETE
+# DAY 17 COMPLETE
 # ----------------------------------------
 
 print("\n========================================")
-print("          DAY 16 COMPLETED")
+print("          DAY 17 COMPLETED")
 print("========================================")
