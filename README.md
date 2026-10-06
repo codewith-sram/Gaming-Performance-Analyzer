@@ -429,3 +429,33 @@ Today I started learning Pandas for data analysis.
 ```python
 pd.DataFrame()
 df["column"]
+
+## Day 16 - Pandas Data Analysis
+
+Today I learned how to analyze a Pandas DataFrame.
+
+### New Functions and Concepts
+
+- `df.head()`
+- `df.tail()`
+- `df.info()`
+- `df.describe()`
+- `df.shape`
+
+### What They Do
+
+`head()` displays the first rows of the dataset.
+
+`tail()` displays the last rows of the dataset.
+
+`info()` provides information about columns and data types.
+
+`describe()` provides statistical information about numerical data.
+
+`shape` tells us the number of rows and columns.
+
+### Gaming Data Analysis
+
+The Gaming Performance Analyzer can now inspect the structure and statistics of the gaming dataset.
+
+Day 16 completed successfully! 
