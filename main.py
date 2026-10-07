@@ -37,10 +37,22 @@ data = {
 df = pd.DataFrame(data)
 
 # ----------------------------------------
-# ADD K/D COLUMN
+# ADD K/D
 # ----------------------------------------
 
 df["K/D"] = df["Kills"] / df["Deaths"]
+
+# ----------------------------------------
+# ADD PERFORMANCE CATEGORY
+# ----------------------------------------
+
+df["Performance"] = df["K/D"].apply(
+    lambda kd:
+    "Excellent" if kd >= 3
+    else "Very Good" if kd >= 2
+    else "Good" if kd >= 1.5
+    else "Needs Improvement"
+)
 
 # ----------------------------------------
 # DISPLAY COMPLETE DATA
@@ -53,70 +65,76 @@ print("========================================")
 print(df.round(2))
 
 # ----------------------------------------
-# FILTER: HIGH KILL MATCHES
+# TOTAL STATISTICS
 # ----------------------------------------
-
-high_kill_matches = df[df["Kills"] >= 15]
 
 print("\n========================================")
-print("       MATCHES WITH 15+ KILLS")
+print("          TOTAL STATISTICS")
 print("========================================")
 
-print(high_kill_matches.round(2))
+print("Total Kills:", df["Kills"].sum())
+print("Total Deaths:", df["Deaths"].sum())
+print("Total Headshots:", df["Headshots"].sum())
+print("Total Assists:", df["Assists"].sum())
 
 # ----------------------------------------
-# FILTER: LOW DEATH MATCHES
+# AVERAGE STATISTICS
 # ----------------------------------------
-
-low_death_matches = df[df["Deaths"] <= 5]
 
 print("\n========================================")
-print("       MATCHES WITH 5 OR LESS DEATHS")
+print("         AVERAGE STATISTICS")
 print("========================================")
 
-print(low_death_matches.round(2))
+print("Average Kills:", round(df["Kills"].mean(), 2))
+print("Average Deaths:", round(df["Deaths"].mean(), 2))
+print("Average Headshots:", round(df["Headshots"].mean(), 2))
+print("Average Assists:", round(df["Assists"].mean(), 2))
+print("Average K/D:", round(df["K/D"].mean(), 2))
 
 # ----------------------------------------
-# FILTER: HIGH K/D MATCHES
+# MAXIMUM STATISTICS
 # ----------------------------------------
-
-high_kd_matches = df[df["K/D"] >= 2.5]
 
 print("\n========================================")
-print("       MATCHES WITH 2.5+ K/D")
+print("        HIGHEST PERFORMANCE")
 print("========================================")
 
-print(high_kd_matches.round(2))
+print("Highest Kills:", df["Kills"].max())
+print("Highest K/D:", round(df["K/D"].max(), 2))
+print("Highest Headshots:", df["Headshots"].max())
+print("Highest Assists:", df["Assists"].max())
 
 # ----------------------------------------
-# SORT BY KILLS
+# MINIMUM STATISTICS
 # ----------------------------------------
-
-sorted_by_kills = df.sort_values(by="Kills", ascending=False)
 
 print("\n========================================")
-print("       MATCHES SORTED BY KILLS")
+print("        LOWEST PERFORMANCE")
 print("========================================")
 
-print(sorted_by_kills.round(2))
+print("Lowest Kills:", df["Kills"].min())
+print("Lowest K/D:", round(df["K/D"].min(), 2))
+print("Lowest Headshots:", df["Headshots"].min())
+print("Lowest Assists:", df["Assists"].min())
 
 # ----------------------------------------
-# SORT BY K/D
+# PERFORMANCE SUMMARY
 # ----------------------------------------
-
-sorted_by_kd = df.sort_values(by="K/D", ascending=False)
 
 print("\n========================================")
-print("       MATCHES SORTED BY K/D")
+print("       PERFORMANCE SUMMARY")
 print("========================================")
 
-print(sorted_by_kd.round(2))
+performance_count = df["Performance"].value_counts()
+
+print(performance_count)
 
 # ----------------------------------------
 # BEST MATCH
 # ----------------------------------------
 
-best_match = df.loc[df["K/D"].idxmax()]
+best_match_index = df["K/D"].idxmax()
+best_match = df.loc[best_match_index]
 
 print("\n========================================")
 print("             BEST MATCH")
@@ -125,9 +143,9 @@ print("========================================")
 print(best_match.round(2))
 
 # ----------------------------------------
-# DAY 17 COMPLETE
+# DAY 18 COMPLETE
 # ----------------------------------------
 
 print("\n========================================")
-print("          DAY 17 COMPLETED")
+print("          DAY 18 COMPLETED")
 print("========================================")
