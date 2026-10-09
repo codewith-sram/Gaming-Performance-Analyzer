@@ -484,3 +484,31 @@ df[df["K/D"] >= 2.5]
 df.sort_values()
 df.loc[]
 df.idxmax()
+
+## Day 19 - Pandas Data Cleaning
+
+Today I learned how to clean gaming data using Pandas.
+
+### New Features
+
+- Detect missing values
+- Fill missing values using the median
+- Detect duplicate rows
+- Remove exact duplicate rows
+- Reset DataFrame indexes
+- Calculate K/D after cleaning data
+
+### Pandas Functions Learned
+
+- `isnull()`
+- `fillna()`
+- `median()`
+- `duplicated()`
+- `drop_duplicates()`
+- `reset_index()`
+
+### What I Learned
+
+Data cleaning improves the quality of a dataset before performing data analysis or machine learning.
+
+Day 19 completed successfully! ✅
