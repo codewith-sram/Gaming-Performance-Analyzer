@@ -511,4 +511,31 @@ Today I learned how to clean gaming data using Pandas.
 
 Data cleaning improves the quality of a dataset before performing data analysis or machine learning.
 
-Day 19 completed successfully! ✅
+Day 19 completed successfully! 
+
+
+## Day 20 - Exporting Gaming Statistics to CSV
+
+Today I learned how to save and load gaming statistics using Pandas.
+
+### New Features
+
+- Export gaming data to a CSV file
+- Read CSV files using Pandas
+- Check whether a file exists
+- Calculate total and average kills
+- Display a summary report
+
+### Functions Learned
+
+- `to_csv()`
+- `read_csv()`
+- `os.path.exists()`
+- `sum()`
+- `mean()`
+
+### What I Learned
+
+CSV files help store gaming data so it can be reused for future analysis and visualization.
+
+Day 20 completed successfully!
