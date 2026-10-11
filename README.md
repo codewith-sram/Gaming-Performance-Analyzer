@@ -539,3 +539,29 @@ Today I learned how to save and load gaming statistics using Pandas.
 CSV files help store gaming data so it can be reused for future analysis and visualization.
 
 Day 20 completed successfully!
+
+
+## Day 21 - Introduction to Matplotlib
+
+Today I learned how to visualize gaming statistics using Matplotlib.
+
+### New Features
+- Read gaming data from a CSV file
+- Create a bar chart of kills per match
+- Add a chart title and axis labels
+- Display grid lines and a legend
+- Save the chart as a PNG image
+
+### Functions Learned
+- `plt.figure()`
+- `plt.bar()`
+- `plt.title()`
+- `plt.xlabel()`
+- `plt.ylabel()`
+- `plt.savefig()`
+- `plt.show()`
+
+### What I Learned
+Data visualization makes gaming performance easier to understand by presenting statistics as charts.
+
+Day 21 completed successfully
