@@ -7,12 +7,13 @@ print("========================================")
 print("      GAMING PERFORMANCE ANALYZER")
 print("========================================")
 
-# CHECK WHETHER THE CSV FILE EXISTS
+# CSV FILE
 filename = "gaming_stats.csv"
 
 if not os.path.exists(filename):
     print("Error: gaming_stats.csv was not found.")
     print("Run your Day 20 program first to create the CSV file.")
+
 else:
     # LOAD GAMING DATA
     df = pd.read_csv(filename)
@@ -20,39 +21,48 @@ else:
     print("\n===== GAMING STATISTICS =====")
     print(df)
 
-    # CALCULATE TOTAL AND AVERAGE KILLS
+    # CALCULATE PERFORMANCE
     total_kills = df["Kills"].sum()
     average_kills = df["Kills"].mean()
 
     print("\nTotal kills:", total_kills)
     print("Average kills:", round(average_kills, 2))
 
-    # CREATE A BAR CHART
+    # CREATE LINE CHART
     plt.figure(figsize=(9, 5))
 
-    plt.bar(
+    plt.plot(
         df["Match"],
         df["Kills"],
-        label="Kills"
+        marker="o",
+        linestyle="-",
+        label="Kills per Match"
     )
 
-    # ADD CHART DETAILS
-    plt.title("Gaming Performance - Kills Per Match")
+    # SHOW AVERAGE KILLS AS A REFERENCE LINE
+    plt.axhline(
+        y=average_kills,
+        linestyle="--",
+        label="Average Kills"
+    )
+
+    # CHART DETAILS
+    plt.title("Gaming Performance Trend")
     plt.xlabel("Match Number")
     plt.ylabel("Number of Kills")
     plt.xticks(df["Match"])
     plt.legend()
-    plt.grid(axis="y", linestyle="--", alpha=0.5)
+    plt.grid(True, linestyle="--", alpha=0.5)
 
-    # SAVE THE CHART
+    # SAVE CHART
     plt.tight_layout()
-    plt.savefig("kills_per_match.png")
+    plt.savefig("kills_trend.png")
 
-    print("\nChart saved as kills_per_match.png")
+    print("\nLine chart saved as kills_trend.png")
 
-    # DISPLAY THE CHART
+    # DISPLAY CHART
     plt.show()
 
     print("\n========================================")
-    print("          DAY 21 COMPLETED")
+    print("          DAY 22 COMPLETED")
     print("========================================")

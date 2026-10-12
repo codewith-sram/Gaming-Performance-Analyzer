@@ -565,3 +565,27 @@ Today I learned how to visualize gaming statistics using Matplotlib.
 Data visualization makes gaming performance easier to understand by presenting statistics as charts.
 
 Day 21 completed successfully
+
+
+## Day 22 - Gaming Performance Trend
+
+Today I learned how to visualize gaming performance using a line chart.
+
+### New Features
+- Display kills across matches
+- Show performance trends
+- Add markers to data points
+- Display average kills as a reference line
+- Save the line chart as a PNG image
+
+### Functions Learned
+- `plt.plot()`
+- `plt.axhline()`
+- `plt.xticks()`
+- `plt.grid()`
+- `plt.savefig()`
+
+### What I Learned
+Line charts help track changes in gaming performance over multiple matches.
+
+Day 22 completed successfully!
