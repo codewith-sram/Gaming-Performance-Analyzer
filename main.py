@@ -7,13 +7,12 @@ print("========================================")
 print("      GAMING PERFORMANCE ANALYZER")
 print("========================================")
 
-# CSV FILE
 filename = "gaming_stats.csv"
 
+# CHECK CSV FILE
 if not os.path.exists(filename):
     print("Error: gaming_stats.csv was not found.")
-    print("Run your Day 20 program first to create the CSV file.")
-
+    print("Run your Day 20 program first.")
 else:
     # LOAD GAMING DATA
     df = pd.read_csv(filename)
@@ -21,48 +20,51 @@ else:
     print("\n===== GAMING STATISTICS =====")
     print(df)
 
-    # CALCULATE PERFORMANCE
+    # CALCULATE TOTALS
     total_kills = df["Kills"].sum()
-    average_kills = df["Kills"].mean()
+    total_deaths = df["Deaths"].sum()
+    total_assists = df["Assists"].sum()
 
-    print("\nTotal kills:", total_kills)
-    print("Average kills:", round(average_kills, 2))
+    print("\n===== TOTAL STATISTICS =====")
+    print("Total kills:", total_kills)
+    print("Total deaths:", total_deaths)
+    print("Total assists:", total_assists)
 
-    # CREATE LINE CHART
-    plt.figure(figsize=(9, 5))
+    # CREATE MULTI-LINE CHART
+    plt.figure(figsize=(10, 6))
 
     plt.plot(
-        df["Match"],
-        df["Kills"],
-        marker="o",
-        linestyle="-",
-        label="Kills per Match"
+        df["Match"], df["Kills"],
+        marker="o", label="Kills"
     )
 
-    # SHOW AVERAGE KILLS AS A REFERENCE LINE
-    plt.axhline(
-        y=average_kills,
-        linestyle="--",
-        label="Average Kills"
+    plt.plot(
+        df["Match"], df["Deaths"],
+        marker="s", label="Deaths"
     )
 
-    # CHART DETAILS
-    plt.title("Gaming Performance Trend")
+    plt.plot(
+        df["Match"], df["Assists"],
+        marker="^", label="Assists"
+    )
+
+    # ADD CHART DETAILS
+    plt.title("Gaming Statistics Comparison")
     plt.xlabel("Match Number")
-    plt.ylabel("Number of Kills")
+    plt.ylabel("Count")
     plt.xticks(df["Match"])
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.5)
 
     # SAVE CHART
     plt.tight_layout()
-    plt.savefig("kills_trend.png")
+    plt.savefig("gaming_comparison.png")
 
-    print("\nLine chart saved as kills_trend.png")
+    print("\nChart saved as gaming_comparison.png")
 
     # DISPLAY CHART
     plt.show()
 
     print("\n========================================")
-    print("          DAY 22 COMPLETED")
+    print("          DAY 23 COMPLETED")
     print("========================================")

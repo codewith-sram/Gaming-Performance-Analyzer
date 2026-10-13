@@ -589,3 +589,27 @@ Today I learned how to visualize gaming performance using a line chart.
 Line charts help track changes in gaming performance over multiple matches.
 
 Day 22 completed successfully!
+
+
+## Day 23 - Comparing Gaming Statistics
+
+Today I learned how to compare multiple gaming statistics using Matplotlib.
+
+### New Features
+- Compare kills, deaths, and assists
+- Display three lines on one chart
+- Add different markers for each statistic
+- Calculate total kills, deaths, and assists
+- Save the chart as a PNG image
+
+### Functions Learned
+- `plt.plot()`
+- `plt.legend()`
+- `plt.xlabel()`
+- `plt.ylabel()`
+- `plt.savefig()`
+
+### What I Learned
+Multi-line charts make it easier to compare different gaming statistics across matches.
+
+Day 23 completed successfully!
