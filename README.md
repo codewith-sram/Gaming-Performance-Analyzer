@@ -613,3 +613,25 @@ Today I learned how to compare multiple gaming statistics using Matplotlib.
 Multi-line charts make it easier to compare different gaming statistics across matches.
 
 Day 23 completed successfully!
+
+
+## Day 24 - Gaming Statistics Pie Chart
+
+Today I learned how to visualize gaming statistics using a pie chart.
+
+### New Features
+- Calculate total kills, deaths, and assists
+- Display the distribution of gaming statistics
+- Show percentage labels on the pie chart
+- Save the chart as a PNG image
+
+### Functions Learned
+- `plt.pie()`
+- `plt.axis()`
+- `plt.title()`
+- `plt.savefig()`
+
+### What I Learned
+Pie charts help visualize the relative proportions of different values in a dataset.
+
+Day 24 completed successfully!

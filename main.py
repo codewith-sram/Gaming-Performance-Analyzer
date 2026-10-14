@@ -30,41 +30,32 @@ else:
     print("Total deaths:", total_deaths)
     print("Total assists:", total_assists)
 
-    # CREATE MULTI-LINE CHART
-    plt.figure(figsize=(10, 6))
+    # PREPARE PIE CHART DATA
+    labels = ["Kills", "Deaths", "Assists"]
+    values = [total_kills, total_deaths, total_assists]
 
-    plt.plot(
-        df["Match"], df["Kills"],
-        marker="o", label="Kills"
+    # CREATE PIE CHART
+    plt.figure(figsize=(8, 8))
+
+    plt.pie(
+        values,
+        labels=labels,
+        autopct="%1.1f%%",
+        startangle=90
     )
 
-    plt.plot(
-        df["Match"], df["Deaths"],
-        marker="s", label="Deaths"
-    )
-
-    plt.plot(
-        df["Match"], df["Assists"],
-        marker="^", label="Assists"
-    )
-
-    # ADD CHART DETAILS
-    plt.title("Gaming Statistics Comparison")
-    plt.xlabel("Match Number")
-    plt.ylabel("Count")
-    plt.xticks(df["Match"])
-    plt.legend()
-    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.title("Distribution of Gaming Statistics")
+    plt.axis("equal")
 
     # SAVE CHART
     plt.tight_layout()
-    plt.savefig("gaming_comparison.png")
+    plt.savefig("gaming_distribution.png")
 
-    print("\nChart saved as gaming_comparison.png")
+    print("\nPie chart saved as gaming_distribution.png")
 
     # DISPLAY CHART
     plt.show()
 
     print("\n========================================")
-    print("          DAY 23 COMPLETED")
+    print("          DAY 24 COMPLETED")
     print("========================================")
