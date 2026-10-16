@@ -661,3 +661,29 @@ A dashboard combines important statistics and charts into one view, making gamin
 
 Day 25 completed successfully!
 
+
+## Day 26 - Introduction to Machine Learning
+
+Today I created my first machine learning model for the Gaming Performance Analyzer.
+
+### New Features
+- Load gaming data from CSV
+- Train a Linear Regression model
+- Predict kills for the next match
+- Visualize actual kills and the regression line
+- Save the prediction chart
+
+### Library Learned
+- `scikit-learn`
+
+### Functions Learned
+- `LinearRegression()`
+- `fit()`
+- `predict()`
+
+### What I Learned
+Machine learning models learn patterns from data and use those patterns to make predictions.
+
+Day 26 completed successfully!
+
+
