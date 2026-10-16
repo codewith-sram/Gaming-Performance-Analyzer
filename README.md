@@ -635,3 +635,29 @@ Today I learned how to visualize gaming statistics using a pie chart.
 Pie charts help visualize the relative proportions of different values in a dataset.
 
 Day 24 completed successfully!
+
+
+## Day 25 - Gaming Performance Dashboard
+
+Today I combined multiple visualizations into one dashboard.
+
+### Dashboard Features
+- Total kills, deaths, and assists
+- Average kills per match
+- Bar chart for kills
+- Line chart for match performance
+- Pie chart for statistics distribution
+- Performance summary panel
+
+### New Concepts Learned
+- `plt.subplots()`
+- Multiple chart panels
+- `fig.suptitle()`
+- `axes[]`
+- `plt.tight_layout()`
+
+### What I Learned
+A dashboard combines important statistics and charts into one view, making gaming performance easier to understand.
+
+Day 25 completed successfully!
+
