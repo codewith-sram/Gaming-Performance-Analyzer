@@ -687,3 +687,27 @@ Machine learning models learn patterns from data and use those patterns to make 
 Day 26 completed successfully!
 
 
+
+## Day 27 - Training and Testing a Model
+
+Today I learned how to split data and evaluate a Linear Regression model.
+
+### New Features
+- Split data into training and testing sets
+- Train a Linear Regression model
+- Compare actual and predicted kills
+- Calculate prediction errors
+- Save testing results to CSV
+- Create a model testing chart
+
+### Functions Learned
+- `train_test_split()`
+- `mean_absolute_error()`
+- `mean_squared_error()`
+- `model.fit()`
+- `model.predict()`
+
+### What I Learned
+Testing a model on data that was not used for training helps measure its prediction performance.
+
+Day 27 completed successfully!
