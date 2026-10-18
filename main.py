@@ -2,10 +2,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-import math
 
 print("========================================")
 print("      GAMING PERFORMANCE ANALYZER")
@@ -18,27 +19,24 @@ if not os.path.exists(filename):
     print("Run your Day 20 program first.")
 
 else:
-    # LOAD DATA
     df = pd.read_csv(filename)
 
-    # KEEP REQUIRED COLUMNS AND REMOVE MISSING VALUES
-    required_columns = ["Match", "Kills"]
-
-    if not all(column in df.columns for column in required_columns):
+    # CHECK REQUIRED COLUMNS
+    if not all(col in df.columns for col in ["Match", "Kills"]):
         print("Error: CSV must contain Match and Kills columns.")
 
     else:
+        # CLEAN REQUIRED DATA
         df = df[["Match", "Kills"]].dropna()
 
         if len(df) < 5:
             print("Please provide at least 5 complete match records.")
 
         else:
-            # INPUT AND OUTPUT
             X = df[["Match"]]
             y = df["Kills"]
 
-            # SPLIT INTO TRAINING AND TESTING DATA
+            # SPLIT DATA
             X_train, X_test, y_train, y_test = train_test_split(
                 X,
                 y,
@@ -46,74 +44,74 @@ else:
                 random_state=42
             )
 
-            print("\n===== DATA SPLIT =====")
-            print("Total records:", len(df))
-            print("Training records:", len(X_train))
-            print("Testing records:", len(X_test))
+            # CREATE TWO MODELS
+            models = {
+                "Linear Regression": LinearRegression(),
+                "Decision Tree": DecisionTreeRegressor(
+                    max_depth=2,
+                    random_state=42
+                )
+            }
 
-            # CREATE AND TRAIN MODEL
-            model = LinearRegression()
-            model.fit(X_train, y_train)
+            results = []
+            predictions = {}
 
-            # PREDICT TEST DATA
-            y_pred = model.predict(X_test)
+            # TRAIN AND EVALUATE EACH MODEL
+            for name, model in models.items():
+                model.fit(X_train, y_train)
+                y_pred = model.predict(X_test)
 
-            # CALCULATE ERROR METRICS
-            mae = mean_absolute_error(y_test, y_pred)
-            mse = mean_squared_error(y_test, y_pred)
-            rmse = math.sqrt(mse)
+                mae = mean_absolute_error(y_test, y_pred)
+                mse = mean_squared_error(y_test, y_pred)
+                rmse = mse ** 0.5
 
-            print("\n===== MODEL EVALUATION =====")
-            print("Mean Absolute Error (MAE):", round(mae, 2))
-            print("Mean Squared Error (MSE):", round(mse, 2))
-            print("Root Mean Squared Error (RMSE):", round(rmse, 2))
+                results.append({
+                    "Model": name,
+                    "MAE": round(mae, 2),
+                    "RMSE": round(rmse, 2)
+                })
 
-            # DISPLAY ACTUAL AND PREDICTED RESULTS
-            results = pd.DataFrame({
-                "Match": X_test["Match"].values,
-                "Actual Kills": y_test.values,
-                "Predicted Kills": y_pred.round(2)
-            })
+                predictions[name] = y_pred
 
-            results = results.sort_values("Match")
+            # DISPLAY COMPARISON
+            results_df = pd.DataFrame(results)
 
-            print("\n===== ACTUAL VS PREDICTED =====")
-            print(results.to_string(index=False))
+            print("\n===== MODEL COMPARISON =====")
+            print(results_df.to_string(index=False))
 
-            # PLOT TEST RESULTS
+            # SAVE COMPARISON TO CSV
+            results_df.to_csv("model_comparison.csv", index=False)
+            print("\nComparison saved as model_comparison.csv")
+
+            # PLOT MODEL ERRORS
             plt.figure(figsize=(9, 5))
 
-            plt.plot(
-                results["Match"],
-                results["Actual Kills"],
-                marker="o",
-                label="Actual Kills"
+            plt.bar(
+                results_df["Model"],
+                results_df["MAE"]
             )
 
-            plt.plot(
-                results["Match"],
-                results["Predicted Kills"],
-                marker="s",
-                linestyle="--",
-                label="Predicted Kills"
-            )
-
-            plt.title("Day 27 - Model Testing Results")
-            plt.xlabel("Match Number")
-            plt.ylabel("Kills")
-            plt.legend()
-            plt.grid(True, linestyle="--", alpha=0.5)
+            plt.title("Model Comparison - Mean Absolute Error")
+            plt.xlabel("Machine Learning Model")
+            plt.ylabel("Mean Absolute Error (lower is better)")
+            plt.grid(axis="y", linestyle="--", alpha=0.5)
             plt.tight_layout()
 
-            # SAVE RESULTS AND CHART
-            results.to_csv("model_test_results.csv", index=False)
-            plt.savefig("model_testing.png")
+            plt.savefig("model_comparison.png")
 
-            print("\nResults saved as model_test_results.csv")
-            print("Chart saved as model_testing.png")
+            print("Chart saved as model_comparison.png")
 
             plt.show()
 
+            # EXPLAIN THE RESULT
+            best_model = results_df.loc[
+                results_df["MAE"].idxmin(), "Model"
+            ]
+
+            print("\nModel with the lowest test MAE:", best_model)
+            print("Lower MAE means smaller average absolute errors.")
+            print("This small dataset is only for practice.")
+
             print("\n========================================")
-            print("          DAY 27 COMPLETED")
+            print("          DAY 28 COMPLETED")
             print("========================================")

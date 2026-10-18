@@ -711,3 +711,28 @@ Today I learned how to split data and evaluate a Linear Regression model.
 Testing a model on data that was not used for training helps measure its prediction performance.
 
 Day 27 completed successfully!
+
+
+
+## Day 28 - Comparing Machine Learning Models
+
+Today I compared Linear Regression and Decision Tree Regression.
+
+### New Features
+- Train two machine learning models
+- Evaluate models using MAE and RMSE
+- Compare prediction errors
+- Save results to a CSV file
+- Visualize model errors using a bar chart
+
+### Libraries and Functions Learned
+- `DecisionTreeRegressor()`
+- `LinearRegression()`
+- `mean_absolute_error()`
+- `mean_squared_error()`
+- `idxmin()`
+
+### What I Learned
+Comparing models helps us understand which model makes smaller errors on a given test dataset.
+
+Day 28 completed successfully!
