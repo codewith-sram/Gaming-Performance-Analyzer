@@ -736,3 +736,29 @@ Today I compared Linear Regression and Decision Tree Regression.
 Comparing models helps us understand which model makes smaller errors on a given test dataset.
 
 Day 28 completed successfully!
+
+
+## Day 29 - Feature Engineering
+
+Today I learned how to create useful features from gaming statistics.
+
+### New Features
+- Calculate K/D ratio
+- Calculate headshot rate
+- Prepare gaming data for machine learning
+- Train a Random Forest regression model
+- Evaluate predictions using MAE and RMSE
+- Save prediction results and a chart
+
+### Functions and Concepts Learned
+- Feature engineering
+- `RandomForestRegressor()`
+- `model.fit()`
+- `model.predict()`
+- `mean_absolute_error()`
+- `mean_squared_error()`
+
+### What I Learned
+Feature engineering transforms raw data into useful information for machine learning. Features must be chosen carefully to avoid leaking the answer into the model.
+
+Day 29 completed successfully!

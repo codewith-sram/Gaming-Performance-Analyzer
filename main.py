@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 print("========================================")
@@ -16,102 +15,122 @@ filename = "gaming_stats.csv"
 
 if not os.path.exists(filename):
     print("Error: gaming_stats.csv was not found.")
-    print("Run your Day 20 program first.")
 
 else:
     df = pd.read_csv(filename)
 
-    # CHECK REQUIRED COLUMNS
-    if not all(col in df.columns for col in ["Match", "Kills"]):
-        print("Error: CSV must contain Match and Kills columns.")
+    required = ["Match", "Kills", "Deaths", "Headshots", "Assists"]
+
+    if not all(col in df.columns for col in required):
+        print("Error: CSV must contain these columns:")
+        print(required)
 
     else:
-        # CLEAN REQUIRED DATA
-        df = df[["Match", "Kills"]].dropna()
+        # SELECT AND CLEAN REQUIRED DATA
+        df = df[required].copy()
+
+        for col in required:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+        df = df.dropna()
+        df = df[
+            (df["Kills"] >= 0)
+            & (df["Deaths"] >= 0)
+            & (df["Headshots"] >= 0)
+            & (df["Assists"] >= 0)
+        ]
+
+        # CREATE NEW FEATURES
+        df["KD_Ratio"] = (
+            df["Kills"] / df["Deaths"].replace(0, float("nan"))
+        ).fillna(0).round(2)
+
+        df["Headshot_Rate"] = (
+            df["Headshots"] / df["Kills"].replace(0, float("nan")) * 100
+        ).fillna(0).round(2)
+
+        print("\n===== FEATURE ENGINEERING =====")
+        print(df[[
+            "Match", "Kills", "Deaths", "Headshots",
+            "Assists", "KD_Ratio", "Headshot_Rate"
+        ]].to_string(index=False))
+
+        # SAVE FEATURE-ENGINEERED DATA
+        df.to_csv("gaming_features.csv", index=False)
+        print("\nFeature data saved as gaming_features.csv")
+
+        # USE GAMEPLAY FEATURES TO ESTIMATE KILLS
+        # K/D and headshot rate are excluded because they use Kills
+        # to calculate them, which would leak the answer to the model.
+        features = ["Deaths", "Headshots", "Assists"]
+        X = df[features]
+        y = df["Kills"]
 
         if len(df) < 5:
-            print("Please provide at least 5 complete match records.")
-
+            print("Add at least 5 valid match records to train and test.")
         else:
-            X = df[["Match"]]
-            y = df["Kills"]
-
-            # SPLIT DATA
             X_train, X_test, y_train, y_test = train_test_split(
-                X,
-                y,
-                test_size=0.2,
+                X, y, test_size=0.2, random_state=42
+            )
+
+            model = RandomForestRegressor(
+                n_estimators=100,
                 random_state=42
             )
 
-            # CREATE TWO MODELS
-            models = {
-                "Linear Regression": LinearRegression(),
-                "Decision Tree": DecisionTreeRegressor(
-                    max_depth=2,
-                    random_state=42
-                )
-            }
+            model.fit(X_train, y_train)
+            predictions = model.predict(X_test)
 
-            results = []
-            predictions = {}
+            mae = mean_absolute_error(y_test, predictions)
+            rmse = mean_squared_error(y_test, predictions) ** 0.5
 
-            # TRAIN AND EVALUATE EACH MODEL
-            for name, model in models.items():
-                model.fit(X_train, y_train)
-                y_pred = model.predict(X_test)
+            results = pd.DataFrame({
+                "Actual_Kills": y_test.values,
+                "Predicted_Kills": predictions.round(2)
+            })
 
-                mae = mean_absolute_error(y_test, y_pred)
-                mse = mean_squared_error(y_test, y_pred)
-                rmse = mse ** 0.5
+            print("\n===== MODEL EVALUATION =====")
+            print("Features used:", features)
+            print("Training records:", len(X_train))
+            print("Testing records:", len(X_test))
+            print("Mean Absolute Error:", round(mae, 2))
+            print("Root Mean Squared Error:", round(rmse, 2))
 
-                results.append({
-                    "Model": name,
-                    "MAE": round(mae, 2),
-                    "RMSE": round(rmse, 2)
-                })
+            print("\n===== ACTUAL VS PREDICTED =====")
+            print(results.to_string(index=False))
 
-                predictions[name] = y_pred
+            results.to_csv("day29_predictions.csv", index=False)
 
-            # DISPLAY COMPARISON
-            results_df = pd.DataFrame(results)
+            # PLOT ACTUAL VS PREDICTED KILLS
+            plt.figure(figsize=(8, 5))
 
-            print("\n===== MODEL COMPARISON =====")
-            print(results_df.to_string(index=False))
-
-            # SAVE COMPARISON TO CSV
-            results_df.to_csv("model_comparison.csv", index=False)
-            print("\nComparison saved as model_comparison.csv")
-
-            # PLOT MODEL ERRORS
-            plt.figure(figsize=(9, 5))
-
-            plt.bar(
-                results_df["Model"],
-                results_df["MAE"]
+            plt.scatter(
+                y_test, predictions,
+                label="Predictions"
             )
 
-            plt.title("Model Comparison - Mean Absolute Error")
-            plt.xlabel("Machine Learning Model")
-            plt.ylabel("Mean Absolute Error (lower is better)")
-            plt.grid(axis="y", linestyle="--", alpha=0.5)
+            lower = min(y_test.min(), predictions.min())
+            upper = max(y_test.max(), predictions.max())
+
+            plt.plot(
+                [lower, upper], [lower, upper],
+                linestyle="--",
+                label="Perfect prediction"
+            )
+
+            plt.title("Day 29 - Actual vs Predicted Kills")
+            plt.xlabel("Actual Kills")
+            plt.ylabel("Predicted Kills")
+            plt.legend()
+            plt.grid(True, linestyle="--", alpha=0.5)
             plt.tight_layout()
+            plt.savefig("day29_prediction_chart.png")
 
-            plt.savefig("model_comparison.png")
-
-            print("Chart saved as model_comparison.png")
+            print("\nPredictions saved as day29_predictions.csv")
+            print("Chart saved as day29_prediction_chart.png")
 
             plt.show()
 
-            # EXPLAIN THE RESULT
-            best_model = results_df.loc[
-                results_df["MAE"].idxmin(), "Model"
-            ]
-
-            print("\nModel with the lowest test MAE:", best_model)
-            print("Lower MAE means smaller average absolute errors.")
-            print("This small dataset is only for practice.")
-
             print("\n========================================")
-            print("          DAY 28 COMPLETED")
+            print("          DAY 29 COMPLETED")
             print("========================================")
