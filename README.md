@@ -762,3 +762,27 @@ Today I learned how to create useful features from gaming statistics.
 Feature engineering transforms raw data into useful information for machine learning. Features must be chosen carefully to avoid leaking the answer into the model.
 
 Day 29 completed successfully!
+
+## Day 30 - Feature Importance
+
+Today I learned how to examine feature importance in a Random Forest model.
+
+### New Features
+- Train a Random Forest regression model
+- Evaluate predictions using MAE
+- Calculate feature-importance scores
+- Rank gaming features
+- Export importance scores to CSV
+- Visualize feature importance using a bar chart
+
+### Functions and Concepts Learned
+- `RandomForestRegressor()`
+- `feature_importances_`
+- `sort_values()`
+- `mean_absolute_error()`
+- `plt.bar()`
+
+### What I Learned
+Feature importance helps identify which input features a trained model relies on most when making predictions.
+
+Day 30 completed successfully!

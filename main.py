@@ -1,11 +1,10 @@
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
 
 print("========================================")
 print("      GAMING PERFORMANCE ANALYZER")
@@ -15,122 +14,107 @@ filename = "gaming_stats.csv"
 
 if not os.path.exists(filename):
     print("Error: gaming_stats.csv was not found.")
+    print("Run your Day 20 program first.")
 
 else:
     df = pd.read_csv(filename)
 
-    required = ["Match", "Kills", "Deaths", "Headshots", "Assists"]
+    # CHECK REQUIRED COLUMNS
+    required = ["Kills", "Deaths", "Assists"]
 
-    if not all(col in df.columns for col in required):
-        print("Error: CSV must contain these columns:")
-        print(required)
+    if not all(column in df.columns for column in required):
+        print("Error: CSV must contain Kills, Deaths, and Assists.")
 
     else:
-        # SELECT AND CLEAN REQUIRED DATA
+        # CLEAN DATA
         df = df[required].copy()
 
-        for col in required:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
+        for column in required:
+            df[column] = pd.to_numeric(df[column], errors="coerce")
 
         df = df.dropna()
         df = df[
             (df["Kills"] >= 0)
             & (df["Deaths"] >= 0)
-            & (df["Headshots"] >= 0)
             & (df["Assists"] >= 0)
         ]
 
-        # CREATE NEW FEATURES
-        df["KD_Ratio"] = (
-            df["Kills"] / df["Deaths"].replace(0, float("nan"))
-        ).fillna(0).round(2)
-
-        df["Headshot_Rate"] = (
-            df["Headshots"] / df["Kills"].replace(0, float("nan")) * 100
-        ).fillna(0).round(2)
-
-        print("\n===== FEATURE ENGINEERING =====")
-        print(df[[
-            "Match", "Kills", "Deaths", "Headshots",
-            "Assists", "KD_Ratio", "Headshot_Rate"
-        ]].to_string(index=False))
-
-        # SAVE FEATURE-ENGINEERED DATA
-        df.to_csv("gaming_features.csv", index=False)
-        print("\nFeature data saved as gaming_features.csv")
-
-        # USE GAMEPLAY FEATURES TO ESTIMATE KILLS
-        # K/D and headshot rate are excluded because they use Kills
-        # to calculate them, which would leak the answer to the model.
-        features = ["Deaths", "Headshots", "Assists"]
-        X = df[features]
-        y = df["Kills"]
-
         if len(df) < 5:
-            print("Add at least 5 valid match records to train and test.")
+            print("Please provide at least 5 valid match records.")
+
         else:
+            # INPUT FEATURES AND TARGET
+            # Do not use Headshots or K/D here because they depend on Kills.
+            X = df[["Deaths", "Assists"]]
+            y = df["Kills"]
+
+            # SPLIT DATA
             X_train, X_test, y_train, y_test = train_test_split(
-                X, y, test_size=0.2, random_state=42
+                X,
+                y,
+                test_size=0.2,
+                random_state=42
             )
 
+            # TRAIN MODEL
             model = RandomForestRegressor(
                 n_estimators=100,
                 random_state=42
             )
 
             model.fit(X_train, y_train)
+
+            # EVALUATE MODEL
             predictions = model.predict(X_test)
-
             mae = mean_absolute_error(y_test, predictions)
-            rmse = mean_squared_error(y_test, predictions) ** 0.5
-
-            results = pd.DataFrame({
-                "Actual_Kills": y_test.values,
-                "Predicted_Kills": predictions.round(2)
-            })
 
             print("\n===== MODEL EVALUATION =====")
-            print("Features used:", features)
             print("Training records:", len(X_train))
             print("Testing records:", len(X_test))
             print("Mean Absolute Error:", round(mae, 2))
-            print("Root Mean Squared Error:", round(rmse, 2))
 
-            print("\n===== ACTUAL VS PREDICTED =====")
-            print(results.to_string(index=False))
+            # CALCULATE FEATURE IMPORTANCE
+            importance_df = pd.DataFrame({
+                "Feature": X.columns,
+                "Importance": model.feature_importances_
+            })
 
-            results.to_csv("day29_predictions.csv", index=False)
+            importance_df = importance_df.sort_values(
+                "Importance",
+                ascending=False
+            )
 
-            # PLOT ACTUAL VS PREDICTED KILLS
+            print("\n===== FEATURE IMPORTANCE =====")
+            print(importance_df.to_string(index=False))
+
+            # SAVE IMPORTANCE RESULTS
+            importance_df.to_csv(
+                "feature_importance.csv",
+                index=False
+            )
+
+            print("\nResults saved as feature_importance.csv")
+
+            # CREATE FEATURE IMPORTANCE CHART
             plt.figure(figsize=(8, 5))
 
-            plt.scatter(
-                y_test, predictions,
-                label="Predictions"
+            plt.bar(
+                importance_df["Feature"],
+                importance_df["Importance"]
             )
 
-            lower = min(y_test.min(), predictions.min())
-            upper = max(y_test.max(), predictions.max())
-
-            plt.plot(
-                [lower, upper], [lower, upper],
-                linestyle="--",
-                label="Perfect prediction"
-            )
-
-            plt.title("Day 29 - Actual vs Predicted Kills")
-            plt.xlabel("Actual Kills")
-            plt.ylabel("Predicted Kills")
-            plt.legend()
-            plt.grid(True, linestyle="--", alpha=0.5)
+            plt.title("Gaming Performance - Feature Importance")
+            plt.xlabel("Gaming Feature")
+            plt.ylabel("Relative Importance")
+            plt.grid(axis="y", linestyle="--", alpha=0.5)
             plt.tight_layout()
-            plt.savefig("day29_prediction_chart.png")
 
-            print("\nPredictions saved as day29_predictions.csv")
-            print("Chart saved as day29_prediction_chart.png")
+            plt.savefig("feature_importance.png")
+
+            print("Chart saved as feature_importance.png")
 
             plt.show()
 
             print("\n========================================")
-            print("          DAY 29 COMPLETED")
+            print("          DAY 30 COMPLETED")
             print("========================================")
