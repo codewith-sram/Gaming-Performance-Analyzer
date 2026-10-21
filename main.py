@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import KFold, cross_val_score
 
 print("========================================")
 print("      GAMING PERFORMANCE ANALYZER")
@@ -17,20 +16,20 @@ if not os.path.exists(filename):
     print("Run your Day 20 program first.")
 
 else:
+    # LOAD DATA
     df = pd.read_csv(filename)
 
-    # CHECK REQUIRED COLUMNS
-    required = ["Kills", "Deaths", "Assists"]
+    required_columns = ["Kills", "Deaths", "Assists"]
 
-    if not all(column in df.columns for column in required):
+    if not all(col in df.columns for col in required_columns):
         print("Error: CSV must contain Kills, Deaths, and Assists.")
 
     else:
         # CLEAN DATA
-        df = df[required].copy()
+        df = df[required_columns].copy()
 
-        for column in required:
-            df[column] = pd.to_numeric(df[column], errors="coerce")
+        for col in required_columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
 
         df = df.dropna()
         df = df[
@@ -44,77 +43,84 @@ else:
 
         else:
             # INPUT FEATURES AND TARGET
-            # Do not use Headshots or K/D here because they depend on Kills.
             X = df[["Deaths", "Assists"]]
             y = df["Kills"]
 
-            # SPLIT DATA
-            X_train, X_test, y_train, y_test = train_test_split(
-                X,
-                y,
-                test_size=0.2,
-                random_state=42
-            )
-
-            # TRAIN MODEL
+            # CREATE MODEL
             model = RandomForestRegressor(
                 n_estimators=100,
                 random_state=42
             )
 
-            model.fit(X_train, y_train)
-
-            # EVALUATE MODEL
-            predictions = model.predict(X_test)
-            mae = mean_absolute_error(y_test, predictions)
-
-            print("\n===== MODEL EVALUATION =====")
-            print("Training records:", len(X_train))
-            print("Testing records:", len(X_test))
-            print("Mean Absolute Error:", round(mae, 2))
-
-            # CALCULATE FEATURE IMPORTANCE
-            importance_df = pd.DataFrame({
-                "Feature": X.columns,
-                "Importance": model.feature_importances_
-            })
-
-            importance_df = importance_df.sort_values(
-                "Importance",
-                ascending=False
+            # CREATE 5-FOLD CROSS-VALIDATION
+            kfold = KFold(
+                n_splits=5,
+                shuffle=True,
+                random_state=42
             )
 
-            print("\n===== FEATURE IMPORTANCE =====")
-            print(importance_df.to_string(index=False))
+            # CALCULATE MAE FOR EACH FOLD
+            scores = cross_val_score(
+                model,
+                X,
+                y,
+                cv=kfold,
+                scoring="neg_mean_absolute_error"
+            )
 
-            # SAVE IMPORTANCE RESULTS
-            importance_df.to_csv(
-                "feature_importance.csv",
+            # CONVERT NEGATIVE MAE TO POSITIVE VALUES
+            mae_scores = -scores
+
+            results_df = pd.DataFrame({
+                "Fold": range(1, len(mae_scores) + 1),
+                "MAE": mae_scores.round(2)
+            })
+
+            average_mae = mae_scores.mean()
+            std_mae = mae_scores.std()
+
+            print("\n===== 5-FOLD CROSS-VALIDATION =====")
+            print(results_df.to_string(index=False))
+
+            print("\nAverage MAE:", round(average_mae, 2))
+            print("MAE standard deviation:", round(std_mae, 2))
+
+            # SAVE RESULTS
+            results_df.to_csv(
+                "cross_validation_results.csv",
                 index=False
             )
 
-            print("\nResults saved as feature_importance.csv")
+            print("\nResults saved as cross_validation_results.csv")
 
-            # CREATE FEATURE IMPORTANCE CHART
-            plt.figure(figsize=(8, 5))
+            # CREATE CHART
+            plt.figure(figsize=(9, 5))
 
             plt.bar(
-                importance_df["Feature"],
-                importance_df["Importance"]
+                results_df["Fold"],
+                results_df["MAE"]
             )
 
-            plt.title("Gaming Performance - Feature Importance")
-            plt.xlabel("Gaming Feature")
-            plt.ylabel("Relative Importance")
+            plt.axhline(
+                y=average_mae,
+                linestyle="--",
+                label=f"Average MAE: {average_mae:.2f}"
+            )
+
+            plt.title("Day 31 - Cross-Validation Results")
+            plt.xlabel("Fold Number")
+            plt.ylabel("Mean Absolute Error (lower is better)")
+            plt.xticks(results_df["Fold"])
+            plt.legend()
             plt.grid(axis="y", linestyle="--", alpha=0.5)
             plt.tight_layout()
 
-            plt.savefig("feature_importance.png")
+            plt.savefig("cross_validation.png")
 
-            print("Chart saved as feature_importance.png")
+            print("Chart saved as cross_validation.png")
 
             plt.show()
 
             print("\n========================================")
-            print("          DAY 30 COMPLETED")
+            print("          DAY 31 COMPLETED")
             print("========================================")

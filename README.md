@@ -786,3 +786,26 @@ Today I learned how to examine feature importance in a Random Forest model.
 Feature importance helps identify which input features a trained model relies on most when making predictions.
 
 Day 30 completed successfully!
+
+## Day 31 - K-Fold Cross-Validation
+
+Today I learned how to evaluate a machine learning model using cross-validation.
+
+### New Features
+- Evaluate a Random Forest model across five folds
+- Calculate MAE for each fold
+- Calculate average MAE and standard deviation
+- Export cross-validation results to CSV
+- Visualize evaluation results using a bar chart
+
+### Functions and Concepts Learned
+- `KFold()`
+- `cross_val_score()`
+- `neg_mean_absolute_error`
+- Mean Absolute Error (MAE)
+- Standard deviation
+
+### What I Learned
+Cross-validation evaluates a model across multiple data splits and helps us understand how its prediction errors vary.
+
+Day 31 completed successfully!
