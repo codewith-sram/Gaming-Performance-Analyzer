@@ -809,3 +809,30 @@ Today I learned how to evaluate a machine learning model using cross-validation.
 Cross-validation evaluates a model across multiple data splits and helps us understand how its prediction errors vary.
 
 Day 31 completed successfully!
+
+
+## Day 32 - Hyperparameter Tuning with Grid Search
+
+Today I learned how to tune a Random Forest model using Grid Search.
+
+### New Features
+- Test multiple model configurations
+- Use five-fold cross-validation
+- Find the best model settings
+- Compare cross-validation errors
+- Export Grid Search results to CSV
+- Visualize model performance
+
+### Functions and Concepts Learned
+- `GridSearchCV()`
+- `param_grid`
+- `best_params_`
+- `best_score_`
+- `n_estimators`
+- `max_depth`
+
+### What I Learned
+Hyperparameter tuning helps compare model settings to find a configuration with better cross-validation performance.
+
+Day 32 completed successfully!
+
