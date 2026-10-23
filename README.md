@@ -836,3 +836,28 @@ Hyperparameter tuning helps compare model settings to find a configuration with 
 
 Day 32 completed successfully!
 
+
+
+## Day 33 - Saving and Loading a Machine Learning Model
+
+Today I learned how to save and reload a trained Random Forest model.
+
+### New Features
+- Train a Random Forest model using Grid Search
+- Save the trained model with joblib
+- Load the saved model
+- Predict kills from new match statistics
+- Save predictions to a CSV file
+
+### Functions Learned
+- `joblib.dump()`
+- `joblib.load()`
+- `model.predict()`
+- `pd.DataFrame()`
+- `to_csv()`
+
+### What I Learned
+Saving a trained model allows it to be reused later without having to rebuild it from scratch.
+
+Day 33 completed successfully!
+

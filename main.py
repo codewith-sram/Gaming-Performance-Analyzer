@@ -1,40 +1,37 @@
 
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
+import joblib
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV, KFold
-from sklearn.metrics import mean_absolute_error
 
 print("========================================")
 print("      GAMING PERFORMANCE ANALYZER")
 print("========================================")
 
 filename = "gaming_stats.csv"
+model_file = "gaming_model.pkl"
 
-# STEP 1: CHECK WHETHER THE CSV EXISTS
+# STEP 1: CHECK THE CSV FILE
 if not os.path.exists(filename):
     print("Error: gaming_stats.csv was not found.")
     print("Please run your Day 20 program first.")
 
 else:
-    # STEP 2: LOAD GAMING DATA
     df = pd.read_csv(filename)
 
     required_columns = ["Kills", "Deaths", "Assists"]
 
-    if not all(column in df.columns for column in required_columns):
+    if not all(col in df.columns for col in required_columns):
         print("Error: CSV must contain Kills, Deaths, and Assists.")
 
     else:
-        # STEP 3: CLEAN DATA
+        # STEP 2: CLEAN DATA
         df = df[required_columns].copy()
 
-        for column in required_columns:
-            df[column] = pd.to_numeric(
-                df[column], errors="coerce"
-            )
+        for col in required_columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
 
         df = df.dropna()
 
@@ -45,14 +42,14 @@ else:
         ]
 
         if len(df) < 5:
-            print("Error: Please provide at least 5 valid match records.")
+            print("Please provide at least 5 valid match records.")
 
         else:
-            # STEP 4: PREPARE FEATURES AND TARGET
+            # STEP 3: PREPARE FEATURES AND TARGET
             X = df[["Deaths", "Assists"]]
             y = df["Kills"]
 
-            # STEP 5: DEFINE GRID SEARCH SETTINGS
+            # STEP 4: FIND GOOD MODEL SETTINGS
             parameter_grid = {
                 "n_estimators": [50, 100],
                 "max_depth": [2, 3, None]
@@ -64,99 +61,86 @@ else:
                 random_state=42
             )
 
-            # STEP 6: RUN GRID SEARCH
             grid_search = GridSearchCV(
-                estimator=RandomForestRegressor(
-                    random_state=42
-                ),
+                estimator=RandomForestRegressor(random_state=42),
                 param_grid=parameter_grid,
                 scoring="neg_mean_absolute_error",
                 cv=kfold,
                 n_jobs=-1
             )
 
-            print("\nTesting six model configurations...")
+            print("\nTraining the model...")
             grid_search.fit(X, y)
 
-            # STEP 7: DISPLAY THE BEST SETTINGS
-            print("\n===== BEST MODEL SETTINGS =====")
-            print("Best parameters:", grid_search.best_params_)
+            best_model = grid_search.best_estimator_
+
+            print("Best settings:", grid_search.best_params_)
             print(
-                "Best cross-validation MAE:",
+                "Cross-validation MAE:",
                 round(-grid_search.best_score_, 2)
             )
 
-            # STEP 8: PREPARE RESULTS
-            results_df = pd.DataFrame(
-                grid_search.cv_results_
-            )
+            # STEP 5: SAVE THE TRAINED MODEL
+            joblib.dump(best_model, model_file)
 
-            results_df = pd.DataFrame({
-                "Trees": results_df["param_n_estimators"].astype(int),
-                "Max_Depth": results_df["param_max_depth"].astype(str),
-                "Mean_MAE": -results_df["mean_test_score"],
-                "Score_Std": results_df["std_test_score"],
-                "Rank": results_df["rank_test_score"]
-            })
+            print("\nModel saved as", model_file)
 
-            results_df["Mean_MAE"] = results_df["Mean_MAE"].round(3)
-            results_df["Score_Std"] = results_df["Score_Std"].round(3)
+            # STEP 6: LOAD THE SAVED MODEL
+            loaded_model = joblib.load(model_file)
 
-            results_df = results_df.sort_values(
-                "Rank"
-            ).reset_index(drop=True)
+            print("Saved model loaded successfully!")
 
-            print("\n===== GRID SEARCH RESULTS =====")
-            print(results_df.to_string(index=False))
+            # STEP 7: ASK FOR NEW MATCH STATISTICS
+            print("\n===== PREDICT YOUR NEXT MATCH =====")
 
-            # STEP 9: SAVE RESULTS
-            results_df.to_csv(
-                "grid_search_results.csv",
-                index=False
-            )
+            try:
+                deaths = float(input("Enter expected deaths: "))
+                assists = float(input("Enter expected assists: "))
 
-            print("\nResults saved as grid_search_results.csv")
+                if deaths < 0 or assists < 0:
+                    print("Deaths and assists cannot be negative.")
 
-            # STEP 10: CREATE CHART
-            # Convert labels and values to ordinary Python lists.
-            chart_labels = [
-                f"Trees={trees}\nDepth={depth}"
-                for trees, depth in zip(
-                    results_df["Trees"].tolist(),
-                    results_df["Max_Depth"].tolist()
-                )
-            ]
+                else:
+                    # KEEP INPUT FORMAT THE SAME AS TRAINING
+                    new_match = pd.DataFrame({
+                        "Deaths": [deaths],
+                        "Assists": [assists]
+                    })
 
-            chart_values = results_df["Mean_MAE"].astype(float).tolist()
+                    prediction = loaded_model.predict(new_match)[0]
+                    prediction = max(0, prediction)
 
-            plt.figure(figsize=(10, 6))
+                    print(
+                        "\nPredicted kills:",
+                        round(prediction, 2)
+                    )
 
-            plt.bar(
-                range(len(chart_labels)),
-                chart_values,
-                tick_label=chart_labels
-            )
+                    # STEP 8: SAVE PREDICTION
+                    prediction_data = pd.DataFrame({
+                        "Deaths": [deaths],
+                        "Assists": [assists],
+                        "Predicted_Kills": [round(prediction, 2)]
+                    })
 
-            plt.title("Grid Search - Random Forest Settings")
-            plt.xlabel("Model Settings")
-            plt.ylabel("Cross-Validation MAE (lower is better)")
-            plt.xticks(rotation=30, ha="right")
-            plt.grid(axis="y", linestyle="--", alpha=0.5)
-            plt.tight_layout()
+                    output_file = "gaming_prediction.csv"
 
-            # SAVE CHART
-            plt.savefig(
-                "grid_search_comparison.png",
-                dpi=150,
-                bbox_inches="tight"
-            )
+                    if os.path.exists(output_file):
+                        old_data = pd.read_csv(output_file)
+                        prediction_data = pd.concat(
+                            [old_data, prediction_data],
+                            ignore_index=True
+                        )
 
-            print("Chart saved as grid_search_comparison.png")
+                    prediction_data.to_csv(
+                        output_file,
+                        index=False
+                    )
 
-            # STEP 11: DISPLAY CHART
-            plt.show()
+                    print("Prediction saved to", output_file)
 
-            # STEP 12: FINISH
+            except ValueError:
+                print("Please enter valid numeric values.")
+
             print("\n========================================")
-            print("          DAY 32 COMPLETED")
+            print("          DAY 33 COMPLETED")
             print("========================================")
