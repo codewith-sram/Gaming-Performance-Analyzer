@@ -861,3 +861,27 @@ Saving a trained model allows it to be reused later without having to rebuild it
 
 Day 33 completed successfully!
 
+## Day 34: Prediction System Using a Saved Model
+
+### Objective
+Use the saved machine learning model to predict kills without retraining it.
+
+### Concepts Learned
+- Loading a saved model using Joblib
+- Making predictions with new input data
+- Using Pandas DataFrames
+- Saving prediction results to CSV
+- Maintaining prediction history
+
+### Files Created
+- `day34_predictions.csv`
+- `prediction_history.csv`
+
+### How to Run
+```bash
+python main.py
+```
+
+### Outcome
+The program accepts deaths and assists for multiple matches,
+predicts kills using the saved model, and saves the results.

@@ -1,146 +1,118 @@
 
 import os
-import pandas as pd
 import joblib
+import pandas as pd
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import GridSearchCV, KFold
+MODEL_FILE = "gaming_model.pkl"
+PREDICTIONS_FILE = "day34_predictions.csv"
+HISTORY_FILE = "prediction_history.csv"
 
-print("========================================")
-print("      GAMING PERFORMANCE ANALYZER")
-print("========================================")
 
-filename = "gaming_stats.csv"
-model_file = "gaming_model.pkl"
+def main():
+    print("=" * 45)
+    print(" GAMING PERFORMANCE ANALYZER - DAY 34")
+    print(" Saved Model Prediction System")
+    print("=" * 45)
 
-# STEP 1: CHECK THE CSV FILE
-if not os.path.exists(filename):
-    print("Error: gaming_stats.csv was not found.")
-    print("Please run your Day 20 program first.")
+    # Check whether the Day 33 model exists
+    if not os.path.exists(MODEL_FILE):
+        print(f"\nError: {MODEL_FILE} was not found.")
+        print("Run your Day 33 program first to create the saved model.")
+        return
 
-else:
-    df = pd.read_csv(filename)
+    # Load the saved model without training again
+    try:
+        model = joblib.load(MODEL_FILE)
+    except Exception as error:
+        print("Could not load the saved model.")
+        print("Details:", error)
+        return
 
-    required_columns = ["Kills", "Deaths", "Assists"]
+    print("\nSaved model loaded successfully!")
 
-    if not all(col in df.columns for col in required_columns):
-        print("Error: CSV must contain Kills, Deaths, and Assists.")
+    try:
+        number_of_matches = int(
+            input("\nHow many matches do you want to predict? ")
+        )
 
+        if number_of_matches <= 0:
+            print("Please enter a number greater than zero.")
+            return
+
+        match_data = []
+
+        for match_number in range(1, number_of_matches + 1):
+            print(f"\n--- Match {match_number} ---")
+
+            deaths = int(input("Enter deaths: "))
+            assists = int(input("Enter assists: "))
+
+            if deaths < 0 or assists < 0:
+                print("Deaths and assists cannot be negative.")
+                return
+
+            match_data.append({
+                "Deaths": deaths,
+                "Assists": assists
+            })
+
+    except ValueError:
+        print("Invalid input. Please enter whole numbers.")
+        return
+
+    # Create a DataFrame with the same features used in Day 33
+    input_data = pd.DataFrame(
+        match_data,
+        columns=["Deaths", "Assists"]
+    )
+
+    try:
+        predicted_kills = model.predict(input_data)
+    except Exception as error:
+        print("\nPrediction failed. Check that the Day 33 model")
+        print("was trained using the features Deaths and Assists.")
+        print("Details:", error)
+        return
+
+    # Prepare the prediction results
+    results = input_data.copy()
+    results.insert(
+        0,
+        "Match",
+        range(1, number_of_matches + 1)
+    )
+    results["Predicted_Kills"] = (
+        pd.Series(predicted_kills).round(0).astype(int).values
+    )
+
+    # Save this session's predictions
+    results.to_csv(PREDICTIONS_FILE, index=False)
+
+    # Add predictions to the history file
+    results["Prediction_Date"] = pd.Timestamp.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    if os.path.exists(HISTORY_FILE):
+        results.to_csv(
+            HISTORY_FILE,
+            mode="a",
+            header=False,
+            index=False
+        )
     else:
-        # STEP 2: CLEAN DATA
-        df = df[required_columns].copy()
+        results.to_csv(HISTORY_FILE, index=False)
 
-        for col in required_columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
+    print("\n" + "=" * 45)
+    print(" PREDICTION RESULTS")
+    print("=" * 45)
+    print(results.to_string(index=False))
 
-        df = df.dropna()
+    print("\nFiles saved successfully:")
+    print(f"1. {PREDICTIONS_FILE}")
+    print(f"2. {HISTORY_FILE}")
+    print("\nDay 34 completed!")
 
-        df = df[
-            (df["Kills"] >= 0)
-            & (df["Deaths"] >= 0)
-            & (df["Assists"] >= 0)
-        ]
 
-        if len(df) < 5:
-            print("Please provide at least 5 valid match records.")
-
-        else:
-            # STEP 3: PREPARE FEATURES AND TARGET
-            X = df[["Deaths", "Assists"]]
-            y = df["Kills"]
-
-            # STEP 4: FIND GOOD MODEL SETTINGS
-            parameter_grid = {
-                "n_estimators": [50, 100],
-                "max_depth": [2, 3, None]
-            }
-
-            kfold = KFold(
-                n_splits=5,
-                shuffle=True,
-                random_state=42
-            )
-
-            grid_search = GridSearchCV(
-                estimator=RandomForestRegressor(random_state=42),
-                param_grid=parameter_grid,
-                scoring="neg_mean_absolute_error",
-                cv=kfold,
-                n_jobs=-1
-            )
-
-            print("\nTraining the model...")
-            grid_search.fit(X, y)
-
-            best_model = grid_search.best_estimator_
-
-            print("Best settings:", grid_search.best_params_)
-            print(
-                "Cross-validation MAE:",
-                round(-grid_search.best_score_, 2)
-            )
-
-            # STEP 5: SAVE THE TRAINED MODEL
-            joblib.dump(best_model, model_file)
-
-            print("\nModel saved as", model_file)
-
-            # STEP 6: LOAD THE SAVED MODEL
-            loaded_model = joblib.load(model_file)
-
-            print("Saved model loaded successfully!")
-
-            # STEP 7: ASK FOR NEW MATCH STATISTICS
-            print("\n===== PREDICT YOUR NEXT MATCH =====")
-
-            try:
-                deaths = float(input("Enter expected deaths: "))
-                assists = float(input("Enter expected assists: "))
-
-                if deaths < 0 or assists < 0:
-                    print("Deaths and assists cannot be negative.")
-
-                else:
-                    # KEEP INPUT FORMAT THE SAME AS TRAINING
-                    new_match = pd.DataFrame({
-                        "Deaths": [deaths],
-                        "Assists": [assists]
-                    })
-
-                    prediction = loaded_model.predict(new_match)[0]
-                    prediction = max(0, prediction)
-
-                    print(
-                        "\nPredicted kills:",
-                        round(prediction, 2)
-                    )
-
-                    # STEP 8: SAVE PREDICTION
-                    prediction_data = pd.DataFrame({
-                        "Deaths": [deaths],
-                        "Assists": [assists],
-                        "Predicted_Kills": [round(prediction, 2)]
-                    })
-
-                    output_file = "gaming_prediction.csv"
-
-                    if os.path.exists(output_file):
-                        old_data = pd.read_csv(output_file)
-                        prediction_data = pd.concat(
-                            [old_data, prediction_data],
-                            ignore_index=True
-                        )
-
-                    prediction_data.to_csv(
-                        output_file,
-                        index=False
-                    )
-
-                    print("Prediction saved to", output_file)
-
-            except ValueError:
-                print("Please enter valid numeric values.")
-
-            print("\n========================================")
-            print("          DAY 33 COMPLETED")
-            print("========================================")
+if __name__ == "__main__":
+    main()
