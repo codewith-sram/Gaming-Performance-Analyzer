@@ -885,3 +885,31 @@ python main.py
 ### Outcome
 The program accepts deaths and assists for multiple matches,
 predicts kills using the saved model, and saves the results.
+
+
+## Day 35: Machine Learning Model Evaluation
+
+### Objective
+Evaluate the saved gaming performance prediction model.
+
+### Concepts Learned
+- Loading a saved machine learning model
+- Comparing actual and predicted kills
+- Mean Absolute Error (MAE)
+- Mean Squared Error (MSE)
+- Root Mean Squared Error (RMSE)
+- Visualizing model predictions
+
+### Files Created
+- `day35_model_evaluation.csv`
+- `day35_model_evaluation.png`
+
+### How to Run
+```bash
+python main.py
+```
+
+### Outcome
+The program evaluates model predictions against actual
+kills and saves an evaluation report and comparison chart.
+
