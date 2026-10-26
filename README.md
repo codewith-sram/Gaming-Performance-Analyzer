@@ -913,3 +913,32 @@ python main.py
 The program evaluates model predictions against actual
 kills and saves an evaluation report and comparison chart.
 
+
+
+## Day 36: Prediction Error Analysis
+
+### Objective
+Analyze the difference between actual and predicted gaming kills.
+
+### Concepts Learned
+- Prediction error calculation
+- Absolute error analysis
+- MAE, MSE and RMSE
+- Identifying matches with large prediction errors
+- Data analysis using Pandas
+- Visualizing actual and predicted results using Matplotlib
+
+### Files Created
+- `day36_error_analysis.csv`
+- `day36_error_analysis.png`
+
+### How to Run
+```bash
+python main.py
+```
+
+### Outcome
+The program analyzes prediction errors, summarizes error
+levels, identifies matches with large errors, and saves
+a CSV report and visualization.
+

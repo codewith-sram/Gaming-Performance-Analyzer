@@ -6,17 +6,17 @@ import matplotlib.pyplot as plt
 
 MODEL_FILE = "gaming_model.pkl"
 DATA_FILE = "gaming_stats.csv"
-REPORT_FILE = "day35_model_evaluation.csv"
-CHART_FILE = "day35_model_evaluation.png"
+REPORT_FILE = "day36_error_analysis.csv"
+CHART_FILE = "day36_error_analysis.png"
 
 
 def main():
-    print("=" * 45)
-    print(" GAMING PERFORMANCE ANALYZER - DAY 35")
-    print(" Model Evaluation System")
-    print("=" * 45)
+    print("=" * 50)
+    print(" GAMING PERFORMANCE ANALYZER - DAY 36")
+    print(" Prediction Error Analysis")
+    print("=" * 50)
 
-    # Check required files
+    # Check files
     if not os.path.exists(MODEL_FILE):
         print(f"\nError: {MODEL_FILE} not found.")
         print("Run Day 33 first to create the saved model.")
@@ -24,10 +24,9 @@ def main():
 
     if not os.path.exists(DATA_FILE):
         print(f"\nError: {DATA_FILE} not found.")
-        print("Make sure your gaming dataset is in this folder.")
         return
 
-    # Load the saved model and gaming dataset
+    # Load model and data
     try:
         model = joblib.load(MODEL_FILE)
         data = pd.read_csv(DATA_FILE)
@@ -39,76 +38,105 @@ def main():
     required_columns = ["Deaths", "Assists", "Kills"]
 
     if not all(column in data.columns for column in required_columns):
-        print("\nError: The dataset must contain these columns:")
-        print(", ".join(required_columns))
-        print("\nAvailable columns:", list(data.columns))
+        print("\nRequired columns:", required_columns)
+        print("Available columns:", list(data.columns))
         return
 
-    # Keep only required columns and clean invalid values
+    # Clean the required columns
     data = data[required_columns].copy()
 
     for column in required_columns:
         data[column] = pd.to_numeric(data[column], errors="coerce")
 
-    data = data.dropna()
+    data = data.dropna().reset_index(drop=True)
 
-    if len(data) < 2:
-        print("At least two valid matches are required.")
+    if data.empty:
+        print("No valid match data was found.")
         return
 
-    # Use the same features as the Day 33 model
-    X = data[["Deaths", "Assists"]]
-    actual_kills = data["Kills"]
+    # Predict kills using the saved model
+    features = data[["Deaths", "Assists"]]
+    actual_kills = data["Kills"].to_numpy()
 
     try:
-        predicted_kills = model.predict(X)
+        predicted_kills = model.predict(features)
     except Exception as error:
-        print("Prediction failed. Check your Day 33 model features.")
+        print("Prediction failed. Check the model's input features.")
         print("Details:", error)
         return
 
-    # Calculate evaluation metrics
-    errors = actual_kills.to_numpy() - predicted_kills
-    mae = abs(errors).mean()
-    mse = (errors ** 2).mean()
-    rmse = mse ** 0.5
+    # Calculate prediction errors
+    error_values = actual_kills - predicted_kills
+    absolute_errors = abs(error_values)
 
     results = data.copy()
-    results["Predicted_Kills"] = predicted_kills
-    results["Prediction_Error"] = errors
-    results["Absolute_Error"] = abs(errors)
+    results["Match_Number"] = range(1, len(results) + 1)
+    results["Predicted_Kills"] = predicted_kills.round(2)
+    results["Error"] = error_values.round(2)
+    results["Absolute_Error"] = absolute_errors.round(2)
+
+    # Label matches by prediction accuracy
+    results["Error_Level"] = results["Absolute_Error"].apply(
+        lambda error: (
+            "Low" if error < 1
+            else "Medium" if error < 3
+            else "High"
+        )
+    )
 
     results.to_csv(REPORT_FILE, index=False)
 
-    print("\nMODEL EVALUATION RESULTS")
-    print("-" * 45)
-    print(f"Matches evaluated: {len(results)}")
+    # Summary metrics
+    mae = absolute_errors.mean()
+    mse = (error_values ** 2).mean()
+    rmse = mse ** 0.5
+
+    print("\nERROR ANALYSIS SUMMARY")
+    print("-" * 50)
+    print(f"Matches analyzed: {len(results)}")
     print(f"Mean Absolute Error (MAE): {mae:.2f}")
     print(f"Mean Squared Error (MSE): {mse:.2f}")
     print(f"Root Mean Squared Error (RMSE): {rmse:.2f}")
 
-    print("\nFirst five evaluation results:")
-    print(results.head().round(2).to_string(index=False))
+    print("\nError Level Summary:")
+    print(results["Error_Level"].value_counts().to_string())
 
-    # Create an actual-versus-predicted chart
-    plt.figure(figsize=(9, 5))
-    match_numbers = range(1, len(results) + 1)
+    # Show matches with the largest errors
+    print("\nMatches with the largest prediction errors:")
+    worst_matches = results.nlargest(5, "Absolute_Error")
+
+    print(
+        worst_matches[
+            [
+                "Match_Number",
+                "Kills",
+                "Predicted_Kills",
+                "Error",
+                "Absolute_Error",
+                "Error_Level"
+            ]
+        ].to_string(index=False)
+    )
+
+    # Plot actual and predicted kills
+    plt.figure(figsize=(10, 6))
+    match_numbers = results["Match_Number"]
 
     plt.plot(
         match_numbers,
-        actual_kills,
+        results["Kills"],
         marker="o",
         label="Actual Kills"
     )
     plt.plot(
         match_numbers,
-        predicted_kills,
+        results["Predicted_Kills"],
         marker="s",
         linestyle="--",
         label="Predicted Kills"
     )
 
-    plt.title("Actual vs Predicted Kills")
+    plt.title("Day 36: Actual vs Predicted Kills")
     plt.xlabel("Match Number")
     plt.ylabel("Kills")
     plt.legend()
@@ -117,10 +145,10 @@ def main():
     plt.savefig(CHART_FILE, dpi=150)
     plt.close()
 
-    print("\nFiles created:")
+    print("\nFiles created successfully:")
     print(f"1. {REPORT_FILE}")
     print(f"2. {CHART_FILE}")
-    print("\nDay 35 completed!")
+    print("\nDay 36 completed!")
 
 
 if __name__ == "__main__":
