@@ -2,153 +2,194 @@
 import os
 import joblib
 import pandas as pd
-import matplotlib.pyplot as plt
 
-MODEL_FILE = "gaming_model.pkl"
 DATA_FILE = "gaming_stats.csv"
-REPORT_FILE = "day36_error_analysis.csv"
-CHART_FILE = "day36_error_analysis.png"
+MODEL_FILE = "gaming_model.pkl"
+
+
+def load_data():
+    """Load and validate the gaming dataset."""
+    if not os.path.exists(DATA_FILE):
+        print(f"\nError: {DATA_FILE} was not found.")
+        return None
+
+    try:
+        data = pd.read_csv(DATA_FILE)
+        required = ["Kills", "Deaths", "Assists"]
+
+        if not all(column in data.columns for column in required):
+            print("\nThe dataset must contain Kills, Deaths and Assists.")
+            print("Available columns:", list(data.columns))
+            return None
+
+        for column in required:
+            data[column] = pd.to_numeric(
+                data[column], errors="coerce"
+            )
+
+        data = data.dropna(subset=required)
+
+        if data.empty:
+            print("\nNo valid match records were found.")
+            return None
+
+        return data
+
+    except Exception as error:
+        print("Could not read the dataset:", error)
+        return None
+
+
+def show_statistics():
+    """Display basic gaming statistics."""
+    data = load_data()
+
+    if data is None:
+        return
+
+    print("\n========== GAMING STATISTICS ==========")
+    print(f"Total matches: {len(data)}")
+    print(f"Total kills: {data['Kills'].sum():.0f}")
+    print(f"Total deaths: {data['Deaths'].sum():.0f}")
+    print(f"Total assists: {data['Assists'].sum():.0f}")
+    print(f"Average kills: {data['Kills'].mean():.2f}")
+    print(f"Average deaths: {data['Deaths'].mean():.2f}")
+    print(f"Average assists: {data['Assists'].mean():.2f}")
+
+    kd_ratio = (
+        data["Kills"].sum() / data["Deaths"].sum()
+        if data["Deaths"].sum() != 0
+        else float("inf")
+    )
+
+    if kd_ratio == float("inf"):
+        print("Overall K/D ratio: Undefined (zero total deaths)")
+    else:
+        print(f"Overall K/D ratio: {kd_ratio:.2f}")
+
+    print("\nFirst five matches:")
+    print(data.head().to_string(index=False))
+
+
+def predict_kills():
+    """Predict kills using the saved Day 33 model."""
+    if not os.path.exists(MODEL_FILE):
+        print(f"\nError: {MODEL_FILE} was not found.")
+        print("Run your Day 33 program first.")
+        return
+
+    try:
+        model = joblib.load(MODEL_FILE)
+
+        deaths = int(input("Enter expected deaths: "))
+        assists = int(input("Enter expected assists: "))
+
+        if deaths < 0 or assists < 0:
+            print("Values cannot be negative.")
+            return
+
+        input_data = pd.DataFrame(
+            [{"Deaths": deaths, "Assists": assists}]
+        )
+
+        prediction = model.predict(input_data)[0]
+
+        print("\n========== PREDICTION ==========")
+        print(f"Deaths entered: {deaths}")
+        print(f"Assists entered: {assists}")
+        print(f"Estimated kills: {prediction:.2f}")
+
+        save = input("\nSave this prediction to CSV? (y/n): ").strip().lower()
+
+        if save == "y":
+            result = pd.DataFrame([{
+                "Deaths": deaths,
+                "Assists": assists,
+                "Predicted_Kills": round(float(prediction), 2)
+            }])
+
+            file_name = "day37_predictions.csv"
+
+            if os.path.exists(file_name):
+                result.to_csv(
+                    file_name, mode="a", header=False, index=False
+                )
+            else:
+                result.to_csv(file_name, index=False)
+
+            print(f"Prediction saved to {file_name}")
+
+    except ValueError:
+        print("Please enter valid whole numbers.")
+    except Exception as error:
+        print("Prediction failed:", error)
+
+
+def export_report():
+    """Export a cleaned copy of the gaming dataset."""
+    data = load_data()
+
+    if data is None:
+        return
+
+    file_name = "day37_gaming_report.csv"
+
+    try:
+        data.to_csv(file_name, index=False)
+        print(f"\nReport exported successfully: {file_name}")
+    except Exception as error:
+        print("Could not export report:", error)
+
+
+def show_menu():
+    """Display the application menu."""
+    print("\n" + "=" * 45)
+    print("      GAMING PERFORMANCE ANALYZER")
+    print("=" * 45)
+    print("1. View Gaming Statistics")
+    print("2. Predict Kills")
+    print("3. Export Gaming Report")
+    print("4. View Dataset Information")
+    print("5. Exit")
+    print("=" * 45)
+
+
+def show_dataset_info():
+    """Display dataset structure and summary."""
+    data = load_data()
+
+    if data is None:
+        return
+
+    print("\n========== DATASET INFORMATION ==========")
+    print(f"Rows: {data.shape[0]}")
+    print(f"Columns: {data.shape[1]}")
+    print("\nColumn names:")
+    print(", ".join(data.columns))
+    print("\nStatistical summary:")
+    print(data.describe().round(2).to_string())
 
 
 def main():
-    print("=" * 50)
-    print(" GAMING PERFORMANCE ANALYZER - DAY 36")
-    print(" Prediction Error Analysis")
-    print("=" * 50)
+    print("\nWelcome to Gaming Performance Analyzer!")
 
-    # Check files
-    if not os.path.exists(MODEL_FILE):
-        print(f"\nError: {MODEL_FILE} not found.")
-        print("Run Day 33 first to create the saved model.")
-        return
+    while True:
+        show_menu()
+        choice = input("Enter your choice (1-5): ").strip()
 
-    if not os.path.exists(DATA_FILE):
-        print(f"\nError: {DATA_FILE} not found.")
-        return
-
-    # Load model and data
-    try:
-        model = joblib.load(MODEL_FILE)
-        data = pd.read_csv(DATA_FILE)
-    except Exception as error:
-        print("Could not load the model or dataset.")
-        print("Details:", error)
-        return
-
-    required_columns = ["Deaths", "Assists", "Kills"]
-
-    if not all(column in data.columns for column in required_columns):
-        print("\nRequired columns:", required_columns)
-        print("Available columns:", list(data.columns))
-        return
-
-    # Clean the required columns
-    data = data[required_columns].copy()
-
-    for column in required_columns:
-        data[column] = pd.to_numeric(data[column], errors="coerce")
-
-    data = data.dropna().reset_index(drop=True)
-
-    if data.empty:
-        print("No valid match data was found.")
-        return
-
-    # Predict kills using the saved model
-    features = data[["Deaths", "Assists"]]
-    actual_kills = data["Kills"].to_numpy()
-
-    try:
-        predicted_kills = model.predict(features)
-    except Exception as error:
-        print("Prediction failed. Check the model's input features.")
-        print("Details:", error)
-        return
-
-    # Calculate prediction errors
-    error_values = actual_kills - predicted_kills
-    absolute_errors = abs(error_values)
-
-    results = data.copy()
-    results["Match_Number"] = range(1, len(results) + 1)
-    results["Predicted_Kills"] = predicted_kills.round(2)
-    results["Error"] = error_values.round(2)
-    results["Absolute_Error"] = absolute_errors.round(2)
-
-    # Label matches by prediction accuracy
-    results["Error_Level"] = results["Absolute_Error"].apply(
-        lambda error: (
-            "Low" if error < 1
-            else "Medium" if error < 3
-            else "High"
-        )
-    )
-
-    results.to_csv(REPORT_FILE, index=False)
-
-    # Summary metrics
-    mae = absolute_errors.mean()
-    mse = (error_values ** 2).mean()
-    rmse = mse ** 0.5
-
-    print("\nERROR ANALYSIS SUMMARY")
-    print("-" * 50)
-    print(f"Matches analyzed: {len(results)}")
-    print(f"Mean Absolute Error (MAE): {mae:.2f}")
-    print(f"Mean Squared Error (MSE): {mse:.2f}")
-    print(f"Root Mean Squared Error (RMSE): {rmse:.2f}")
-
-    print("\nError Level Summary:")
-    print(results["Error_Level"].value_counts().to_string())
-
-    # Show matches with the largest errors
-    print("\nMatches with the largest prediction errors:")
-    worst_matches = results.nlargest(5, "Absolute_Error")
-
-    print(
-        worst_matches[
-            [
-                "Match_Number",
-                "Kills",
-                "Predicted_Kills",
-                "Error",
-                "Absolute_Error",
-                "Error_Level"
-            ]
-        ].to_string(index=False)
-    )
-
-    # Plot actual and predicted kills
-    plt.figure(figsize=(10, 6))
-    match_numbers = results["Match_Number"]
-
-    plt.plot(
-        match_numbers,
-        results["Kills"],
-        marker="o",
-        label="Actual Kills"
-    )
-    plt.plot(
-        match_numbers,
-        results["Predicted_Kills"],
-        marker="s",
-        linestyle="--",
-        label="Predicted Kills"
-    )
-
-    plt.title("Day 36: Actual vs Predicted Kills")
-    plt.xlabel("Match Number")
-    plt.ylabel("Kills")
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-    plt.savefig(CHART_FILE, dpi=150)
-    plt.close()
-
-    print("\nFiles created successfully:")
-    print(f"1. {REPORT_FILE}")
-    print(f"2. {CHART_FILE}")
-    print("\nDay 36 completed!")
+        if choice == "1":
+            show_statistics()
+        elif choice == "2":
+            predict_kills()
+        elif choice == "3":
+            export_report()
+        elif choice == "4":
+            show_dataset_info()
+        elif choice == "5":
+            print("\nThank you for using Gaming Performance Analyzer!")
+            break
+        else:
+            print("\nInvalid choice. Please enter a number from 1 to 5.")
 
 
 if __name__ == "__main__":

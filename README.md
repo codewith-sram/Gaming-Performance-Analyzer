@@ -942,3 +942,41 @@ The program analyzes prediction errors, summarizes error
 levels, identifies matches with large errors, and saves
 a CSV report and visualization.
 
+
+
+## Day 37: Integrated Gaming Performance Analyzer
+
+### Objective
+Integrate gaming statistics, machine learning predictions,
+dataset information and report exporting into one application.
+
+### Features
+- View gaming statistics
+- Predict kills using a saved ML model
+- Export a gaming report to CSV
+- View dataset information and summary
+- Navigate through a menu-driven interface
+
+### Concepts Learned
+- Python functions
+- Menu-driven applications
+- Loops and conditional statements
+- Pandas data analysis
+- Loading saved models with Joblib
+- CSV report generation
+- Error handling
+
+### Files Created
+- `app.py`
+- `day37_gaming_report.csv` (when exported)
+- `day37_predictions.csv` (when a prediction is saved)
+
+### How to Run
+```bash
+python app.py
+```
+
+### Outcome
+The project now provides a single menu to access several
+gaming analysis and prediction features.
+
