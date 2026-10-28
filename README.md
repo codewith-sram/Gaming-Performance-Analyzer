@@ -980,3 +980,35 @@ python app.py
 The project now provides a single menu to access several
 gaming analysis and prediction features.
 
+
+## Day 38: Gaming Performance Dashboard
+
+### Objective
+Create a visual dashboard and performance report using gaming data.
+
+### Features
+- Calculate total kills, deaths and assists
+- Calculate average match performance
+- Calculate the overall K/D ratio
+- Visualize kills and deaths by match
+- Compare kills, deaths and assists
+- Display average performance in a dashboard
+
+### Concepts Learned
+- Pandas data analysis
+- Matplotlib charts and subplots
+- CSV report generation
+- Data cleaning and summary statistics
+
+### Files Created
+- `day38_performance_report.csv`
+- `day38_performance_dashboard.png`
+
+### How to Run
+```bash
+python day38.py
+```
+
+### Outcome
+The application generates a gaming performance summary,
+a CSV report, and a four-panel visual dashboard.
