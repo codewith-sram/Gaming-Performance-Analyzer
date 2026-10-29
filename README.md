@@ -1012,3 +1012,38 @@ python day38.py
 ### Outcome
 The application generates a gaming performance summary,
 a CSV report, and a four-panel visual dashboard.
+
+## Day 39: Graphical User Interface (GUI)
+
+### Objective
+Create a desktop GUI for the Gaming Performance Analyzer
+using Python Tkinter.
+
+### Features
+- View gaming statistics
+- Predict kills using a saved machine learning model
+- Export gaming reports
+- Open the Day 38 dashboard
+- Save prediction results to CSV
+
+### Concepts Learned
+- Tkinter GUI development
+- Classes and objects
+- Buttons and event handling
+- Dialog boxes and user input
+- File handling and error handling
+- Integrating Pandas and Joblib
+
+### Files Created
+- `day39_gui.py`
+- `day39_predictions.csv` (when predictions are saved)
+
+### How to Run
+```bash
+python day39_gui.py
+```
+
+### Outcome
+The project now has a desktop interface that allows
+users to access gaming analysis features without using
+terminal menus.
