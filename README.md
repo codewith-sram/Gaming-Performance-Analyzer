@@ -1047,3 +1047,39 @@ python day39_gui.py
 The project now has a desktop interface that allows
 users to access gaming analysis features without using
 terminal menus.
+
+
+
+## Day 40: GUI Match History and Performance Charts
+
+### Objective
+Improve the graphical interface by adding match history,
+prediction history and performance visualizations.
+
+### Features
+- View gaming statistics
+- Display match history in a table
+- View kills, deaths and assists charts
+- Compare average gaming performance
+- View saved prediction history
+
+### Concepts Learned
+- Tkinter GUI development
+- Pandas DataFrame handling
+- Matplotlib chart integration
+- Treeview tables
+- Scrollbars and multiple windows
+- File handling
+
+### Files Created
+- `day40_gui.py`
+
+### How to Run
+```bash
+python day40_gui.py
+```
+
+### Outcome
+The application now provides match history,
+prediction history and performance charts through
+a graphical user interface.
