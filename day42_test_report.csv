@@ -1,0 +1,15 @@
+Test,Status,Details
+Check day41_app.py,PASS,File exists in project folder.
+Check gaming_stats.csv,PASS,File exists in project folder.
+Check gaming_model.pkl,PASS,File exists in project folder.
+Check pandas,PASS,Library is available.
+Check matplotlib,PASS,Library is available.
+Check sklearn,PASS,Library is available.
+Check joblib,PASS,Library is available.
+Check tkinter,PASS,Library is available.
+Load gaming dataset,PASS,Loaded 5 rows.
+Check dataset columns,PASS,"Kills, Deaths and Assists are present."
+Check numeric data,PASS,All required values are numeric.
+Check valid match records,PASS,5 valid matches found.
+Load saved model,PASS,Saved model loaded successfully.
+Test model prediction,PASS,Successfully predicted 5 matches.

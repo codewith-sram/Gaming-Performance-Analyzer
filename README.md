@@ -1129,3 +1129,41 @@ python day41_app.py
 ### Outcome
 All major gaming analysis features are integrated into
 one desktop application with a graphical interface.
+
+
+
+## Day 42: Project Testing and Bug Detection
+
+### Objective
+Test the project files, libraries, dataset and machine learning model.
+
+### Features
+- Check required project files
+- Verify Python libraries
+- Validate gaming dataset columns
+- Detect invalid or missing data
+- Load and test the saved ML model
+- Test model predictions
+- Generate an automatic test report
+
+### Concepts Learned
+- Software testing
+- Error handling
+- Data validation
+- Dependency checking
+- Model testing
+- Automated report generation
+
+### Files Created
+- `day42_testing.py`
+- `day42_test_report.csv`
+
+### How to Run
+```bash
+python day42_testing.py
+```
+
+### Outcome
+The project now includes an automatic testing system
+that checks important components and generates a
+PASS/FAIL testing report.
