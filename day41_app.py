@@ -48,6 +48,7 @@ class GamingPerformanceAnalyzer:
         main_frame.pack(expand=True)
 
         buttons = [
+            ("Add New Match", self.add_match),
             ("View Statistics", self.show_statistics),
             ("Match History", self.show_match_history),
             ("Predict Kills", self.predict_kills),
@@ -88,6 +89,124 @@ class GamingPerformanceAnalyzer:
             fg="#8de0b1"
         )
         self.status.pack(side="bottom", pady=18)
+
+    def add_match(self):
+        window = tk.Toplevel(self.root)
+        window.title("Add New Match")
+        window.geometry("400x350")
+        window.configure(bg="#171923")
+        window.resizable(False, False)
+
+        tk.Label(
+            window,
+            text="ENTER MATCH DETAILS",
+            font=("Arial", 17, "bold"),
+            bg="#171923",
+            fg="white"
+        ).pack(pady=20)
+
+        entries = {}
+
+        for field, example in [
+            ("Kills", "12"),
+            ("Deaths", "4"),
+            ("Assists", "6")
+        ]:
+            tk.Label(
+                window,
+                text=field,
+                font=("Arial", 11, "bold"),
+                bg="#171923",
+                fg="white"
+            ).pack(pady=(8, 3))
+
+            entry = tk.Entry(
+                window,
+                font=("Arial", 12),
+                justify="center"
+            )
+            entry.pack()
+            entry.insert(0, example)
+            entries[field] = entry
+
+        def save_match():
+            try:
+                kills = int(entries["Kills"].get())
+                deaths = int(entries["Deaths"].get())
+                assists = int(entries["Assists"].get())
+
+                if min(kills, deaths, assists) < 0:
+                    messagebox.showerror(
+                        "Invalid Input",
+                        "Values cannot be negative.",
+                        parent=window
+                    )
+                    return
+
+                new_match = pd.DataFrame([{
+                    "Kills": kills,
+                    "Deaths": deaths,
+                    "Assists": assists
+                }])
+
+                if os.path.exists(DATA_FILE):
+                    existing_data = pd.read_csv(DATA_FILE)
+
+                    required = ["Kills", "Deaths", "Assists"]
+
+                    if not all(col in existing_data.columns for col in required):
+                        messagebox.showerror(
+                            "Invalid Dataset",
+                            "Required columns are missing from gaming_stats.csv.",
+                            parent=window
+                        )
+                        return
+
+                    updated_data = pd.concat(
+                        [existing_data, new_match],
+                        ignore_index=True
+                    )
+                else:
+                    updated_data = new_match
+
+                updated_data.to_csv(DATA_FILE, index=False)
+
+                self.status.config(text="New match saved successfully!")
+
+                messagebox.showinfo(
+                    "Success",
+                    f"Match saved!\n\n"
+                    f"Kills: {kills}\n"
+                    f"Deaths: {deaths}\n"
+                    f"Assists: {assists}",
+                    parent=window
+                )
+
+                window.destroy()
+
+            except ValueError:
+                messagebox.showerror(
+                    "Invalid Input",
+                    "Enter whole numbers only.",
+                    parent=window
+                )
+            except Exception as error:
+                messagebox.showerror(
+                    "Save Error",
+                    str(error),
+                    parent=window
+                )
+
+        tk.Button(
+            window,
+            text="SAVE MATCH",
+            command=save_match,
+            font=("Arial", 11, "bold"),
+            bg="#287a50",
+            fg="white",
+            width=20,
+            pady=9
+        ).pack(pady=20)
 
     def load_data(self):
         if not os.path.exists(DATA_FILE):
